@@ -1,0 +1,59 @@
+[
+    {
+        "CategoryId": 1,
+        "CategoryName": "All Kupons",
+        "CategorySlug": "kupons/all"
+    },
+    {
+        "CategoryId": 3,
+        "CategoryName": "New Kupons",
+        "CategorySlug": "kupons/new"
+    },
+    {
+        "CategoryId": 2,
+        "CategoryName": "Hot Kupons",
+        "CategorySlug": "kupons/hot"
+    },
+    {
+        "CategoryId": 5,
+        "CategoryName": "Ending Soon",
+        "CategorySlug": "kupons/endingsoon"
+    },
+    {
+        "CategoryId": 7,
+        "CategoryName": "Kupons by Category",
+        "SubCategories":
+        [
+            {
+                "CategoryId": 71,
+                "CategoryName": "Eat & Drink",
+                "CategorySlug": "kupons/71/eat-and-drink"
+            },
+            {
+                "CategoryId": 72,
+                "CategoryName": "Hobby",
+                "CategorySlug": "kupons/72/hobby"
+            },
+            {
+                "CategoryId": 73,
+                "CategoryName": "Travel",
+                "CategorySlug": "kupons/73/travel"
+            },
+            {
+                "CategoryId": 74,
+                "CategoryName": "Health & Beauty",
+                "CategorySlug": "kupons/74/health-and-beauty"
+            },
+            {
+                "CategoryId": 75,
+                "CategoryName": "Wedding",
+                "CategorySlug": "kupons/75/wedding"
+            }
+        ]
+    },
+    {
+        "CategoryId": 4,
+        "CategoryName": "Honeymoon",
+        "CategorySlug": "kupons/honeymoon"
+    }
+]
