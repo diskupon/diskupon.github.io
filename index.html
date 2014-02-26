@@ -9,17 +9,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="/stylesheets/app.css">
-    <link rel="stylesheet" href="/pace-barbershop.css">
+    <!-- <link rel="stylesheet" href="/pace-barbershop.css"> -->
+    <!--
     <script type="text/javascript">
-        window.paceOptions = {
-            ghostTime: 2000
+        paceOptions = {
+            ajax: false,
+            document: false,
+            eventLag: false,
+            //ghostTime: 2000,
+            restartOnPushState: false,
+            restartOnRequestAfter: false,
+            startOnPageLoad: false
         };
     </script>
+    -->
     <script type="text/javascript" src="/javascripts/vendor.js"></script>
     <script type="text/javascript" src="/javascripts/templates.js"></script>
     <script type="text/javascript" src="/javascripts/app.js"></script>
     <!-- <script type="text/javascript" src="/ajax.js"></script> -->
-    <script type="text/javascript" src="/tempo.js"></script>
+    <!-- <script type="text/javascript" src="/tempo.js"></script> -->
     <script type="text/javascript">
         $(document).ready(function () {
             Diskupon.App.start();
@@ -37,8 +45,8 @@
                     </button>
 
                     <a class="navbar-brand" href="/">
-                        <img src="/images/logo4.jpg" class="dsk-logo dsk-image dsk-borderRadius"/>
-                        <!-- <img src="http://dummyimage.com/257x80/aa0000/ffffff" class="dsk-logo dsk-image dsk-borderRadius"/> -->
+                        <!-- <img src="/images/logo4.jpg" class="dsk-logo dsk-image dsk-borderRadius"/> -->
+                        <img src="http://dummyimage.com/257x80/aa0000/ffffff" class="dsk-logo dsk-image dsk-borderRadius"/>
                     </a>
                 </div><!-- /navbar-header -->
 
@@ -62,21 +70,20 @@
                 </ul><!-- /dsk-topActionsMenu -->
 
                 <div class="collapse navbar-collapse" id="dsk_navbar_collapse">
-                    <form class="navbar-form navbar-right dsk-topSearch" role="search">
+                    <form class="navbar-form navbar-right dsk-topSearch" role="search" id="dsk_searchDeals_form">
                         <div class="input-group">
                             <span class="input-group-btn">
-                                <button type="submit" class="btn btn-default">
+                                <button type="submit" class="btn btn-default" id="dsk_searchDeals_submit">
                                     <i class="fa fa-search"></i>
                                 </button>
                             </span>
-                            <input type="text" class="form-control" placeholder="what are you looking for?" />
+                            <input type="text" class="form-control" placeholder="what are you looking for?" id="dsk_searchDeals_query"/>
                         </div>
                     </form><!-- / dsk-topSearch -->
 
                     <div class="visible-xs dsk-topMenu nav navbar-nav">
                         <div id="dsk_topMenu_Inner_Mobile"></div>
                     </div>
-
                 </div><!-- /navbar-collapse /dsk_navbar_collapse -->
 
             </div>
@@ -94,36 +101,22 @@
     </div>
 
     <script id="homePageLayout_template" type="text/template">
-        <div id="dsk_homeSlides">
-            <div id="dsk_slides" class="carousel slide dsk-homeSlides" data-ride="carousel">
-                <!-- Indicators -->
-                <ol class="carousel-indicators" style="display: none !important;">
-                    <!-- [1,2,3,4,5,6,7, 8] -->
-                    <% _.each([1,2,3], function (i) { %>
-                        <% if (i === 1) { %>
-                        <li data-target="#dsk_slides" data-slide-to="0" class="active"></li>
-                        <% } else { %>
-                        <li data-target="#dsk_slides" data-slide-to="<%= i %>"></li>
-                        <% } %>
-                    <% }) %>
-                </ol>
-
+        <div id="dsk_homeSlides" class="clearfix">
+            <div id="dsk_slides" class="carousel slide dsk-homeSlides hs1 clearfix" data-ride="carousel">
                 <!-- Wrapper for slides -->
                 <div class="carousel-inner">
-                    <!--[1,2,3,4,5,6,7,8]-->
-                    <% _.each([1,2,3], function (i) { %>
-                        <% if (i === 1) { %>
+                    <% _.each(['referralimage1.gif', '201301-mobilecoupon.jpg','mum-mum-banner_1.jpg','card-party-giant-chicago-201112201009-5.exclusive.jpg', 'StPatricksDaySale1.jpg'], function (elem, idx) { %>
+                        <% if (idx === 0) { %>
                         <div class="item active">
                         <% } else { %>
                         <div class="item">
                         <% } %>
-                            <img src="/media/tmp/gambar-banner-<%= i %>.jpg" alt="">
+                            <img src="/media/tmp2/<%= elem %>" alt="">
                             <div class="carousel-caption">
                             </div>
                         </div>
                     <% }) %>
                 </div>
-
                 <!-- Controls -->
                 <a class="left carousel-control" href="#dsk_slides" data-slide="prev">
                     <span class="glyphicon glyphicon-chevron-left"></span>
@@ -132,18 +125,24 @@
                     <span class="glyphicon glyphicon-chevron-right"></span>
                 </a>
             </div>
+            <div class="dsk-homeSlides hs2 clearfix">
+                <img class="dsk-homeSlides-staticImage" src="/media/tmp2/badger-balm-sale-300x300.png" />
+            </div>
+            <div class="dsk-homeSlides hs3 clearfix">
+                <img class="dsk-homeSlides-staticImage" src="/media/tmp2/cvs-300x300.jpg" />
+            </div>
         </div>
-        <div id="dsk_content" class="dsk-content hidden-xs">
+        <div id="dsk_content" class="dsk-content hidden-xs clearfix">
         </div>
-        <div id="dsk_content_mobile" class="dsk-content dsk-content-mobile visible-xs">
+        <div id="dsk_content_mobile" class="dsk-content dsk-content-mobile visible-xs clearfix">
         </div>
     </script>
 
     <script id="detailsPageLayout1_template" type="text/template">
-        <div id="dsk_content" class="dsk-content">
+        <div id="dsk_content" class="dsk-content clearfix">
         </div>
         <!--hidden-xs
-        <div id="dsk_content_mobile" class="dsk-content dsk-content-mobile visible-xs">
+        <div id="dsk_content_mobile" class="dsk-content dsk-content-mobile visible-xs clearfix">
         </div>
         -->
     </script>
