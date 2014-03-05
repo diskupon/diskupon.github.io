@@ -7,26 +7,12 @@
     <meta name="description" content="Diskupon Indonesia">
     <meta name="author" content="Diskupon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="/stylesheets/app.css">
-    <!-- <link rel="stylesheet" href="/pace-barbershop.css"> -->
-    <!--
-    <script type="text/javascript">
-        paceOptions = {
-            ajax: false,
-            document: false,
-            eventLag: false,
-            //ghostTime: 2000,
-            restartOnPushState: false,
-            restartOnRequestAfter: false,
-            startOnPageLoad: false
-        };
-    </script>
-    -->
+    <!-- <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBqAkoDFeYL91MAhFnkbWgxl8p7Qevg294&sensor=false"></script> -->
     <script type="text/javascript" src="/javascripts/vendor.js"></script>
     <script type="text/javascript" src="/javascripts/templates.js"></script>
     <script type="text/javascript" src="/javascripts/app.js"></script>
-    <!-- <script type="text/javascript" src="/ajax.js"></script> -->
     <!-- <script type="text/javascript" src="/tempo.js"></script> -->
     <script type="text/javascript">
         $(document).ready(function () {
@@ -36,59 +22,54 @@
 </head>
 <body>
 
-    <div class="dsk-header" id="dsk_header">
+    <header class="dsk-header" id="dsk_header">
         <div class="navbar navbar-default dsk-navbar dsk-basic dsk-darkGrayOnWhite" role="navigation">
             <div class="container">
                 <div class="navbar-header">
-                    <button type="button" class="navbar-toggle dsk-navtoggle" data-toggle="collapse" data-target="#dsk_navbar_collapse">
-                        <i class="fa fa-bars"></i><!-- <i class="fa fa-search"></i> -->
-                    </button>
-
                     <a class="navbar-brand" href="/">
                         <!-- <img src="/images/logo4.jpg" class="dsk-logo dsk-image dsk-borderRadius"/> -->
-                        <img src="http://dummyimage.com/257x80/aa0000/ffffff" class="dsk-logo dsk-image dsk-borderRadius"/>
+                        <img src="/images/ffffff.png" class="dsk-logo dsk-image dsk-borderRadius"/>
                     </a>
+                    <button type="button" class="navbar-toggle dsk-navtoggle" data-toggle="collapse" data-target="#dsk_navbar_collapse">
+                        <i class="fa fa-bars"></i>
+                    </button>
                 </div><!-- /navbar-header -->
-
                 <ul class="nav navbar-nav navbar-right dsk-topActionsMenu">
                     <li id="dsk_pick_region"></li>
                     <li class="dsk-tamItem cart">
                         <a href="#" class="dsk-tamLink">
-                            <i class="fa fa-shopping-cart"></i>&nbsp;&nbsp;&nbsp;Cart&nbsp;<span class="badge">12</span>
+                            <i class="fa fa-shopping-cart"></i>&nbsp;Cart&nbsp;<span class="badge">12</span>
                         </a>
                     </li>
                     <li class="dsk-tamItem login">
                         <a href="#" class="dsk-tamLink">
-                            <i class="fa fa-user"></i>&nbsp;&nbsp;&nbsp;Login
+                            <i class="fa fa-user"></i>&nbsp;Login
                         </a>
                     </li>
                     <li class="dsk-tamItem register">
                         <a href="#" class="dsk-tamLink">
-                            <i class="fa fa-group"></i>&nbsp;&nbsp;&nbsp;Register
+                            <i class="fa fa-group"></i>&nbsp;Register
                         </a>
                     </li>
                 </ul><!-- /dsk-topActionsMenu -->
-
                 <div class="collapse navbar-collapse" id="dsk_navbar_collapse">
                     <form class="navbar-form navbar-right dsk-topSearch" role="search" id="dsk_searchDeals_form">
                         <div class="input-group">
+                            <input type="text" class="form-control" placeholder="what are you looking for?" id="dsk_searchDeals_query"/>
                             <span class="input-group-btn">
                                 <button type="submit" class="btn btn-default" id="dsk_searchDeals_submit">
                                     <i class="fa fa-search"></i>
                                 </button>
                             </span>
-                            <input type="text" class="form-control" placeholder="what are you looking for?" id="dsk_searchDeals_query"/>
                         </div>
                     </form><!-- / dsk-topSearch -->
-
-                    <div class="visible-xs dsk-topMenu nav navbar-nav">
+                    <div class="dsk-topMenu visible-xs nav navbar-nav">
                         <div id="dsk_topMenu_Inner_Mobile"></div>
                     </div>
                 </div><!-- /navbar-collapse /dsk_navbar_collapse -->
-
             </div>
         </div><!-- /dsk-navbar -->
-    </div><!-- /dsk-header -->
+    </header><!-- /dsk-header -->
 
     <div class="dsk-topMenu hidden-xs" id="dsk_topMenu">
         <div class="container" id="dsk_topMenu_Inner"></div>
@@ -97,54 +78,81 @@
     <div id="dsk_main" class="dsk-main">
     </div>
 
-    <div id="dsk_footer">
+    <div id="dsk_affiliates" class="dsk-affiliates">
     </div>
 
-    <script id="homePageLayout_template" type="text/template">
-        <div id="dsk_homeSlides" class="clearfix">
-            <div id="dsk_slides" class="carousel slide dsk-homeSlides hs1 clearfix" data-ride="carousel">
-                <!-- Wrapper for slides -->
-                <div class="carousel-inner">
-                    <% _.each(['referralimage1.gif', '201301-mobilecoupon.jpg','mum-mum-banner_1.jpg','card-party-giant-chicago-201112201009-5.exclusive.jpg', 'StPatricksDaySale1.jpg'], function (elem, idx) { %>
-                        <% if (idx === 0) { %>
-                        <div class="item active">
-                        <% } else { %>
-                        <div class="item">
-                        <% } %>
-                            <img src="/media/tmp2/<%= elem %>" alt="">
-                            <div class="carousel-caption">
-                            </div>
+    <footer id="dsk_footer" class="dsk-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                    <div class="fs1">
+                        <div class="fs-header">
+                            <!-- <i class="fa fa-info fa-3x"></i> -->
+                            Company
                         </div>
-                    <% }) %>
-                </div>
-                <!-- Controls -->
-                <a class="left carousel-control" href="#dsk_slides" data-slide="prev">
-                    <span class="glyphicon glyphicon-chevron-left"></span>
-                </a>
-                <a class="right carousel-control" href="#dsk_slides" data-slide="next">
-                    <span class="glyphicon glyphicon-chevron-right"></span>
-                </a>
-            </div>
-            <div class="dsk-homeSlides hs2 clearfix">
-                <img class="dsk-homeSlides-staticImage" src="/media/tmp2/badger-balm-sale-300x300.png" />
-            </div>
-            <div class="dsk-homeSlides hs3 clearfix">
-                <img class="dsk-homeSlides-staticImage" src="/media/tmp2/cvs-300x300.jpg" />
+                        <a href="#">About</a>
+                        <a href="#">Jobs</a>
+                        <a href="#">Contact Us</a>
+                        <a href="#">Blog</a>
+                        <a href="#">Press</a>
+                    </div>
+                </div><!-- /.fs1 parent -->
+                <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                    <div class="fs2">
+                        <div class="fs-header">
+                            <!-- <i class="fa fa-question fa-3x"></i> -->
+                            Help
+                        </div>
+                        <a href="#">Customer Support</a>
+                        <a href="#">FAQ</a>
+                        <a href="#">Statistics</a>
+                        <a href="#">Terms and Conditions</a>
+                        <a href="#">Privacy Policy</a>
+                    </div>
+                </div><!-- /.fs2 parent -->
+                <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                    <div class="fs3">
+                        <div class="fs-header">
+                            <!-- <i class="fa fa-question fa-3x"></i> -->
+                            Follow Us
+                        </div>
+                        <a href="#"><i class="fa fa-foursquare fa-2x"></i></a>
+                        <a href="#"><i class="fa fa-instagram fa-2x"></i></a>
+                        <a href="#"><i class="fa fa-facebook-square fa-2x"></i></a>
+                        <a href="#"><i class="fa fa-flickr fa-2x"></i></a>
+                        <a href="#"><i class="fa fa-google-plus-square fa-2x"></i></a>
+                        <a href="#"><i class="fa fa-pinterest-square fa-2x"></i></a>
+                        <a href="#"><i class="fa fa-tumblr-square fa-2x"></i></a>
+                        <a href="#"><i class="fa fa-twitter-square fa-2x"></i></a>
+                        <a href="#"><i class="fa fa-vimeo-square fa-2x"></i></a>
+                        <a href="#"><i class="fa fa-youtube-square fa-2x"></i></a>
+                        <a href="#"><i class="fa fa-vimeo-square fa-2x"></i></a>
+                    </div>
+                </div><!-- /.fs3 parent -->
+                <div class="clearfix"></div>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="fs-copy">
+                        © <script>document.write(new Date().getFullYear())</script> PT Diskupon Indonesia. All Rights Reserved.
+                    </div>
+                </div><!-- /.fs-copy parent -->
             </div>
         </div>
+    </footer>
+
+    <script id="dealListPageLayout_template" type="text/template">
+        <div id="dsk_homeSlides" class="clearfix">
+        </div>
+
         <div id="dsk_content" class="dsk-content hidden-xs clearfix">
         </div>
+
         <div id="dsk_content_mobile" class="dsk-content dsk-content-mobile visible-xs clearfix">
         </div>
     </script>
 
-    <script id="detailsPageLayout1_template" type="text/template">
+    <script id="dealDetailsPageLayout_template" type="text/template">
         <div id="dsk_content" class="dsk-content clearfix">
         </div>
-        <!--hidden-xs
-        <div id="dsk_content_mobile" class="dsk-content dsk-content-mobile visible-xs clearfix">
-        </div>
-        -->
     </script>
 
 </body>
