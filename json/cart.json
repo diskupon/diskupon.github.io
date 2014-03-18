@@ -1,0 +1,34 @@
+[
+    {
+        "KuponId": "1",
+        "Title": "Velit Donec Diam Neque Vestibulum",
+        "ShortDescription": "Leo Odio Condimentum Id Luctus Nec Molestie Sed Justo Pellentesque",
+        "Price": "76000",
+        "QtyBought": "2",
+        "KuponImageUrl": "/media/gambar-kupon-100.jpg"
+    },
+    {
+        "KuponId": "2",
+        "Title": "Porttitor Id Consequat In Consequat Ut",
+        "ShortDescription": "Rhoncus Aliquam Lacus Morbi Quis Tortor Id Nulla Ultrices",
+        "Price": "80000",
+        "QtyBought": "1",
+        "KuponImageUrl": "/media/gambar-kupon-82.jpg"
+    },
+    {
+        "KuponId": "3",
+        "Title": "HP Envy 17.3' TouchSmart Full 1080p HD Laptop (Manufacturer Refurbished)",
+        "ShortDescription": "HP Envy 17.3' TouchSmart Full 1080p HD Laptop with Beats Audio (M7-J020DX) (Manufacturer Refurbished). Free Returns.",
+        "Price": "1678900",
+        "QtyBought": "1",
+        "KuponImageUrl": "/media/gambar-kupon-83.jpg"
+    },
+    {
+        "KuponId": "4",
+        "Title": "Justo Eu Massa Donec Dapibus Duis At",
+        "ShortDescription": "Primis In Faucibus Orci Luctus Et Ultrices Posuere Cubilia Curae Nulla Dapibus",
+        "Price": "125000",
+        "QtyBought": "2",
+        "KuponImageUrl": "/media/gambar-kupon-84.jpg"
+    }
+]

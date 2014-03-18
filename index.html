@@ -7,13 +7,13 @@
     <meta name="description" content="Diskupon Indonesia">
     <meta name="author" content="Diskupon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+    <!-- <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css"> -->
     <link rel="stylesheet" href="/stylesheets/app.css">
     <!-- <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBqAkoDFeYL91MAhFnkbWgxl8p7Qevg294&sensor=false"></script> -->
     <script type="text/javascript" src="/javascripts/vendor.js"></script>
     <script type="text/javascript" src="/javascripts/templates.js"></script>
     <script type="text/javascript" src="/javascripts/app.js"></script>
-    <!-- <script type="text/javascript" src="/tempo.js"></script> -->
+    <script type="text/javascript" src="/ajax.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             Diskupon.App.start();
@@ -36,10 +36,7 @@
                 </div><!-- /navbar-header -->
                 <ul class="nav navbar-nav navbar-right dsk-topActionsMenu">
                     <li id="dsk_pick_region"></li>
-                    <li class="dsk-tamItem cart">
-                        <a href="#" class="dsk-tamLink">
-                            <i class="fa fa-shopping-cart"></i>&nbsp;Cart&nbsp;<span class="badge">12</span>
-                        </a>
+                    <li class="dsk-tamItem cart" id="dsk_cartLinkSection">
                     </li>
                     <li class="dsk-tamItem login">
                         <a href="#" class="dsk-tamLink">
@@ -84,7 +81,7 @@
     <footer id="dsk_footer" class="dsk-footer">
         <div class="container">
             <div class="row">
-                <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                     <div class="fs1">
                         <div class="fs-header">
                             <!-- <i class="fa fa-info fa-3x"></i> -->
@@ -97,7 +94,7 @@
                         <a href="#">Press</a>
                     </div>
                 </div><!-- /.fs1 parent -->
-                <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                     <div class="fs2">
                         <div class="fs-header">
                             <!-- <i class="fa fa-question fa-3x"></i> -->
@@ -110,7 +107,7 @@
                         <a href="#">Privacy Policy</a>
                     </div>
                 </div><!-- /.fs2 parent -->
-                <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                     <div class="fs3">
                         <div class="fs-header">
                             <!-- <i class="fa fa-question fa-3x"></i> -->
