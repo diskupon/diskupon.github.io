@@ -30,10 +30,8 @@
 
 $.mockjax({
     url: '/api/v1/cart',
-    responseTime: 4000,
+    responseTime: 0,
     dataType: 'json',
     proxy: '/json/cart.json'
-    // response: function (settings) {
-    //     this.responseText = "[{\"DealId\":1,\"DealName\":\"Deal 1\"},{\"DealId\":2,\"DealName\":\"Deal 2\"},{\"DealId\":3,\"DealName\":\"Deal 3\"},{\"DealId\":4,\"DealName\":\"Deal 4\"},{\"DealId\":5,\"DealName\":\"Deal 5\"},{\"DealId\":6,\"DealName\":\"Deal 6\"},{\"DealId\":7,\"DealName\":\"Deal 7\"}]";
-    // }
 });
+
