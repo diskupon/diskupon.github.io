@@ -35,3 +35,24 @@ $.mockjax({
     proxy: '/json/cart.json'
 });
 
+$.mockjax({
+    url: '/api/v1/carttotal',
+    responseTime: 0,
+    dataType: 'json',
+    proxy: '/json/cart.json'
+});
+
+$.mockjax({
+    url: '/api/v1/cart12',
+    responseTime: 0,
+    dataType: 'json',
+    response: function (settings) {
+        this.responseText = JSON.stringify({
+            CartId: 23214,
+            Token: settings.data.CartInfo.Token,
+            Timestamp: settings.data.CartInfo.Timestamp,
+            UserId: 65
+        });
+    }
+});
+

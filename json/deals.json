@@ -1,52 +1,52 @@
-[
-    {
-        "DealId": 1,
-        "DealName": "Deal 1",
-        "OriginalPrice": "",
-        "Price": "",
-        "DiscountRate": "",
-        "QtySold": "",
-        "RemainingDays": "",
-        "PictureInList": "",
-        "PictureInDetails": "",
-        "Pictures": [],
-        "Vendor": {},
-        "Description": "",
-        "TermsAndConditions": "",
-        "PaymentInformation": "",
-        "VendorInformation": "",
-        "Kupons": []
-    },
-    {
-        "DealId": 2,
-        "DealName": "Deal 2"
-    },
-    {
-        "DealId": 3,
-        "DealName": "Deal 3"
-    },
-    {
-        "DealId": 4,
-        "DealName": "Deal 4"
-    },
-    {
-        "DealId": 5,
-        "DealName": "Deal 5"
-    },
-    {
-        "DealId": 6,
-        "DealName": "Deal 6"
-    },
-    {
-        "DealId": 7,
-        "DealName": "Deal 7"
-    },
-    {
-        "DealId": 8,
-        "DealName": "Deal 7"
-    },
-    {
-        "DealId": 9,
-        "DealName": "Deal 7"
-    }
-]
+// [
+//     {
+//         "DealId": 1,
+//         "DealName": "Deal 1",
+//         "OriginalPrice": "",
+//         "Price": "",
+//         "DiscountRate": "",
+//         "QtySold": "",
+//         "RemainingDays": "",
+//         "PictureInList": "",
+//         "PictureInDetails": "",
+//         "Pictures": [],
+//         "Vendor": {},
+//         "Description": "",
+//         "TermsAndConditions": "",
+//         "PaymentInformation": "",
+//         "VendorInformation": "",
+//         "Kupons": []
+//     },
+//     {
+//         "DealId": 2,
+//         "DealName": "Deal 2"
+//     },
+//     {
+//         "DealId": 3,
+//         "DealName": "Deal 3"
+//     },
+//     {
+//         "DealId": 4,
+//         "DealName": "Deal 4"
+//     },
+//     {
+//         "DealId": 5,
+//         "DealName": "Deal 5"
+//     },
+//     {
+//         "DealId": 6,
+//         "DealName": "Deal 6"
+//     },
+//     {
+//         "DealId": 7,
+//         "DealName": "Deal 7"
+//     },
+//     {
+//         "DealId": 8,
+//         "DealName": "Deal 7"
+//     },
+//     {
+//         "DealId": 9,
+//         "DealName": "Deal 7"
+//     }
+// ]

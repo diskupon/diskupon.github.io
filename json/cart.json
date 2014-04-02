@@ -7,7 +7,7 @@
         "Price": "76000",
         "PricePerUnit": "38000",
         "QtyBought": "2",
-        "KuponImageUrl": "/media/gambar-kupon-100.jpg"
+        "KuponImageUrl": "/images/gambar-kupon-100.jpg"
     },
     {
         "CartSummaryItemId": "2",
@@ -17,7 +17,7 @@
         "Price": "80000",
         "PricePerUnit": "80000",
         "QtyBought": "1",
-        "KuponImageUrl": "/media/gambar-kupon-82.jpg"
+        "KuponImageUrl": "/images/gambar-kupon-82.jpg"
     },
     {
         "CartSummaryItemId": "3",
@@ -27,7 +27,7 @@
         "Price": "1678900",
         "PricePerUnit": "1678900",
         "QtyBought": "1",
-        "KuponImageUrl": "/media/gambar-kupon-83.jpg"
+        "KuponImageUrl": "/images/gambar-kupon-83.jpg"
     },
     {
         "CartSummaryItemId": "4",
@@ -37,6 +37,6 @@
         "Price": "125000",
         "PricePerUnit": "62500",
         "QtyBought": "2",
-        "KuponImageUrl": "/media/gambar-kupon-84.jpg"
+        "KuponImageUrl": "/images/gambar-kupon-84.jpg"
     }
 ]
