@@ -29,21 +29,21 @@
 // });
 
 $.mockjax({
-    url: '/api/v1/cart',
+    url: '/api/v1/cartsummary',
     responseTime: 0,
     dataType: 'json',
-    proxy: '/json/cart.json'
+    proxy: '/json/cartsummary.json'
 });
 
 $.mockjax({
     url: '/api/v1/carttotal',
     responseTime: 0,
     dataType: 'json',
-    proxy: '/json/cart.json'
+    proxy: '/json/cartsummary.json'
 });
 
 $.mockjax({
-    url: '/api/v1/cart12',
+    url: '/api/v1/addtocart',
     responseTime: 0,
     dataType: 'json',
     response: function (settings) {
@@ -55,4 +55,12 @@ $.mockjax({
         });
     }
 });
+
+$.mockjax({
+    url: '/api/v1/cart',
+    responseTime: 0,
+    dataType: 'json',
+    proxy: '/json/cart.json'
+});
+
 

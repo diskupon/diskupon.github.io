@@ -1,42 +1,27 @@
-[
-    {
-        "CartSummaryItemId": "1",
-        "KuponId": "1",
-        "Title": "Velit Donec Diam Neque Vestibulum",
-        "ShortDescription": "Leo Odio Condimentum Id Luctus Nec Molestie Sed Justo Pellentesque",
-        "Price": "76000",
-        "PricePerUnit": "38000",
-        "QtyBought": "2",
-        "KuponImageUrl": "/images/gambar-kupon-100.jpg"
-    },
-    {
-        "CartSummaryItemId": "2",
-        "KuponId": "2",
-        "Title": "Porttitor Id Consequat In Consequat Ut",
-        "ShortDescription": "Rhoncus Aliquam Lacus Morbi Quis Tortor Id Nulla Ultrices",
-        "Price": "80000",
-        "PricePerUnit": "80000",
-        "QtyBought": "1",
-        "KuponImageUrl": "/images/gambar-kupon-82.jpg"
-    },
-    {
-        "CartSummaryItemId": "3",
-        "KuponId": "3",
-        "Title": "HP Envy 17.3' TouchSmart Full 1080p HD Laptop (Manufacturer Refurbished)",
-        "ShortDescription": "HP Envy 17.3' TouchSmart Full 1080p HD Laptop with Beats Audio (M7-J020DX) (Manufacturer Refurbished). Free Returns.",
-        "Price": "1678900",
-        "PricePerUnit": "1678900",
-        "QtyBought": "1",
-        "KuponImageUrl": "/images/gambar-kupon-83.jpg"
-    },
-    {
-        "CartSummaryItemId": "4",
-        "KuponId": "4",
-        "Title": "Justo Eu Massa Donec Dapibus Duis At",
-        "ShortDescription": "Primis In Faucibus Orci Luctus Et Ultrices Posuere Cubilia Curae Nulla Dapibus",
-        "Price": "125000",
-        "PricePerUnit": "62500",
-        "QtyBought": "2",
-        "KuponImageUrl": "/images/gambar-kupon-84.jpg"
-    }
-]
+{
+    "CartId": "1",
+    "CartToken": "1",
+    "CustomerId": "Velit Donec Diam Neque Vestibulum",
+    "CartTimestamp": "Leo Odio Condimentum Id Luctus Nec Molestie Sed Justo Pellentesque",
+    "CartItems":
+    [
+        {
+            "CartItemId": "1",
+            "DealId": "5",
+            "KuponId": "424",
+            "QtyBought": "1",
+        },
+        {
+            "CartItemId": "2",
+            "DealId": "5",
+            "KuponId": "1550",
+            "QtyBought": "2",
+        },
+        {
+            "CartItemId": "3",
+            "DealId": "5",
+            "KuponId": "3039",
+            "QtyBought": "1",
+        }
+    ]
+}
