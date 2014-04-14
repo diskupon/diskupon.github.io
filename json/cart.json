@@ -10,18 +10,45 @@
             "DealId": "5",
             "KuponId": "424",
             "QtyBought": "1",
+            "DealTitle": "HP Envy 17.3\" TouchSmart Full 1080p HD Laptop (Manufacturer Refurbished)",
+            "DealShortDescription": "HP Envy 17.3\" TouchSmart Full 1080p HD Laptop (Manufacturer Refurbished)",
+            "KuponTitle": "HP Envy 17.3\" TouchSmart Full 1080p HD Laptop (Manufacturer Refurbished)",
+            "KuponShortDescription": "HP Envy 17.3\" TouchSmart Full 1080p HD Laptop (Manufacturer Refurbished)",
+            "KuponOriginalPrice": "6.500.000",
+            "KuponPrice": "3.500.000",
+            "KuponDiscountRate": "46",
+            "Total": "3.500.000",
+            "KuponImage": "/images/gambar-kupon-61.jpg"
         },
         {
             "CartItemId": "2",
             "DealId": "5",
             "KuponId": "1550",
             "QtyBought": "2",
+            "DealTitle": "Vel Sem Sed Sagittis Nam Congue Risus",
+            "DealShortDescription": "Vel Sem Sed Sagittis Nam Congue Risus",
+            "KuponTitle": "Vel Sem Sed Sagittis Nam Congue Risus",
+            "KuponShortDescription": "Vel Sem Sed Sagittis Nam Congue Risus",
+            "KuponOriginalPrice": "1.200.000",
+            "KuponPrice": "1.000.000",
+            "KuponDiscountRate": "17",
+            "Total": "2.000.000",
+            "KuponImage": "/images/gambar-kupon-62.jpg"
         },
         {
             "CartItemId": "3",
             "DealId": "5",
             "KuponId": "3039",
             "QtyBought": "1",
+            "DealTitle": "Lectus Vestibulum Quam Sapien Varius Ut",
+            "DealShortDescription": "Lectus Vestibulum Quam Sapien Varius Ut",
+            "KuponTitle": "Lectus Vestibulum Quam Sapien Varius Ut",
+            "KuponShortDescription": "Lectus Vestibulum Quam Sapien Varius Ut",
+            "KuponOriginalPrice": "250.000",
+            "KuponPrice": "125.000",
+            "KuponDiscountRate": "50",
+            "Total": "125.000",
+            "KuponImage": "/images/gambar-kupon-63.jpg"
         }
     ]
 }

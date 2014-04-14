@@ -63,4 +63,11 @@ $.mockjax({
     proxy: '/json/cart.json'
 });
 
+$.mockjax({
+    url: '/api/v1/paymentmethods',
+    responseTime: 0,
+    dataType: 'json',
+    proxy: '/json/paymentmethods.json'
+});
+
 
