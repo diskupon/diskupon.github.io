@@ -1,2 +1,2339 @@
-function encode(e){var t=e,o=encodeURIComponent(t).replace(/'/g,"%27").replace(/"/g,"%22");return o}function decode(e){var t=e,o=decodeURIComponent(t.replace(/\+/g," "));return o}function prepareBackbonePushState(){Backbone.history&&Backbone.history._hasPushState&&$(document).delegate("a[href^='/']","click",function(e){var t=$(this).attr("href"),o=this.protocol+"//";t.slice(o.length)!==o&&(e.preventDefault(),Backbone.history.navigate(t,!0))})}!function(){"use strict";var e="undefined"!=typeof window?window:global;if("function"!=typeof e.require){var t={},o={},n=function(e,t){return{}.hasOwnProperty.call(e,t)},i=function(e,t){var o,n,i=[];o=/^\.\.?(\/|$)/.test(t)?[e,t].join("/").split("/"):t.split("/");for(var a=0,r=o.length;r>a;a++)n=o[a],".."===n?i.pop():"."!==n&&""!==n&&i.push(n);return i.join("/")},a=function(e){return e.split("/").slice(0,-1).join("/")},r=function(t){return function(o){var n=a(t),r=i(n,o);return e.require(r,t)}},s=function(e,t){var n={id:e,exports:{}};return o[e]=n,t(n.exports,r(e),n),n.exports},l=function(e,a){var r=i(e,".");if(null==a&&(a="/"),n(o,r))return o[r].exports;if(n(t,r))return s(r,t[r]);var l=i(r,"./index");if(n(o,l))return o[l].exports;if(n(t,l))return s(l,t[l]);throw new Error('Cannot find module "'+e+'" from "'+a+'"')},c=function(e,o){if("object"==typeof e)for(var i in e)n(e,i)&&(t[i]=e[i]);else t[e]=o},u=function(){var e=[];for(var o in t)n(t,o)&&e.push(o);return e};e.require=l,e.require.define=c,e.require.register=c,e.require.list=u,e.require.brunch=!0}}(),window.Diskupon={DealCategory:{All:-11,New:-22,Hot:-33,EndingSoon:-44,ByCategory:-55,Honeymoon:-66},API_HOST:"diskupon.apphb.com",requestUrl:function(e){return"/"===e.substring(0,1)?"//"+this.API_HOST+e:"//"+this.API_HOST+"/api/"+e}},function(e){e.App=new Marionette.Application;var t=e.App;t.regionManager=new Marionette.RegionManager,t.regionManager.addRegions({Header:"#dsk_header",RegionSelector:"#dsk_pick_region",TopMenu:"#dsk_topMenu",TopMenuInner:"#dsk_topMenu_Inner",TopMenuInnerMobile:"#dsk_topMenu_Inner_Mobile",Main:"#dsk_main",Affiliates:"#dsk_affiliates",Footer:"#dsk_footer"}),t.on("start",function(){Backbone.history&&(Backbone.history.start({pushState:!0}),prepareBackbonePushState())});var o=t.regionManager.get("Header").el;$(document).on("click",o+" #dsk_searchDeals_submit",function(e){return $(o+" #dsk_searchDeals_form").submit(),e.preventDefault(),!1}),$(document).on("submit",o+" #dsk_searchDeals_form",function(e){var t=$(o+" #dsk_searchDeals_query").val().trim();if(t){var n=encode(t);window.location.href="/kupons/search/"+n}return e.preventDefault(),!1}),$(document).on("click",".dsk-topMenuInnerMobile li a",function(){var e=$(".dsk-navtoggle").hasClass("collapsed");e||$(".dsk-navtoggle").trigger("click")}),$(window).load(function(){}),$(window).resize(function(){"undefined"!=typeof window.msnry&&window.msnry.layout()}),t.SelectedRegionId={get:function(){var e=t.Storage.getItem("ds_regionid");null===e&&(e="2");var o=parseInt(e,10);return o},set:function(e){t.Storage.setItem("ds_regionid",e.toString())}},t.Storage={};var n={setItem:function(e,t){localStorage.setItem(e,t)},getItem:function(e){return localStorage.getItem(e)}},i={setItem:function(){},getItem:function(){return""}};t.Storage="undefined"!=typeof localStorage?n:i}(window.Diskupon),function(e,t){e.AppRouter=Backbone.Marionette.AppRouter.extend({}),t.addInitializer(function(){new e.AppRouter({controller:window.AppRouterController,appRoutes:{"":"showHomePage","kupons/all":"showAllKuponsPage","kupons/new":"showNewKuponsPage","kupons/endingsoon":"showEndingSoonKuponsPage","kupons/hot":"showHotKuponsPage","kupons/category/:id/:name":"showKuponsByCategory","kupons/honeymoon":"showHoneymoon","kupons/details/:id/:name":"showKuponDetails","kupons/search/:query":"searchForKupons",checkout:"checkout"}})})}(window.Diskupon,window.Diskupon.App),function(e,t,o){var n={checkout:function(){this.showHeader(),this.showAffiliates(),o.Cart.controller.checkout()}};$.extend(e,n)}(window.AppRouterController=window.AppRouterController||{},window.Diskupon,window.Diskupon.App),function(e,t,o){var n={stopHeaderModules:function(){o.module("RegionSelector").stop(),o.module("TopMenu").stop(),o.Cart.controller.stopCartLinkModule()},startHeaderModules:function(e){o.module("RegionSelector").start(),o.module("TopMenu").start(e),o.Cart.controller.startCartLinkModule()},showHeader:function(e){this.stopHeaderModules(),this.startHeaderModules(e),o.Cart.controller.showCartLink(),o.RegionSelector.controller.show(),o.TopMenu.controller.show()},showAffiliates:function(){o.module("Affiliates").stop(),o.module("Affiliates").start(),o.Affiliates.controller.show()}};$.extend(e,n)}(window.AppRouterController=window.AppRouterController||{},window.Diskupon,window.Diskupon.App),function(e,t,o){var n={showHomePage:function(){this.showHeader(),this.showAffiliates(),o.Deals.controller.showTopDealsGroupByCategory()},showAllKuponsPage:function(){this.showHeader({CategoryId:t.DealCategory.All}),this.showAffiliates(),o.Deals.controller.showDealsList({categoryId:t.DealCategory.All,searchQuery:""})},showNewKuponsPage:function(){this.showHeader({CategoryId:t.DealCategory.New}),this.showAffiliates(),o.Deals.controller.showDealsList({categoryId:t.DealCategory.New,searchQuery:""})},showEndingSoonKuponsPage:function(){this.showHeader({CategoryId:t.DealCategory.EndingSoon}),this.showAffiliates(),o.Deals.controller.showDealsList({categoryId:t.DealCategory.EndingSoon,searchQuery:""})},showHotKuponsPage:function(){this.showHeader({CategoryId:t.DealCategory.Hot}),this.showAffiliates(),o.Deals.controller.showDealsList({categoryId:t.DealCategory.Hot,searchQuery:""})},showKuponsByCategory:function(e){this.showHeader({CategoryId:t.DealCategory.ByCategory,SubCategoryId:e}),this.showAffiliates(),o.Deals.controller.showDealsList({categoryId:e,searchQuery:""})},showHoneymoon:function(){this.showHeader({CategoryId:t.DealCategory.Honeymoon}),this.showAffiliates()},showKuponDetails:function(e){this.showHeader(),this.showAffiliates(),o.Deals.controller.showDealDetails(e)},searchForKupons:function(e){this.showHeader({CategoryId:t.DealCategory.All}),this.showAffiliates(),o.Deals.controller.showDealsList({categoryId:t.DealCategory.All,searchQuery:e})}};$.extend(e,n)}(window.AppRouterController=window.AppRouterController||{},window.Diskupon,window.Diskupon.App),function(e){e.App.module("Cart",function(e,t,o,n,i){var a=o.Model.extend({idAttribute:"CartSummaryItemId",url:"/api/v1/cartsummary",initialize:function(){"undefined"!=typeof o.Memento&&(this.memento=new o.Memento(this))},deleteData:function(e){var t=i.Deferred();return this.destroy({data:{CartSummaryItemId:this.id,KuponId:this.get("KuponId"),CartInfo:e},wait:!0,success:function(){t.resolve()},error:function(){t.reject()}}),t.promise()},saveDataChanges:function(e){var t=this,o=this.changedAttributes();o.CartInfo=e,this.save(o,{wait:!0,success:function(){},error:function(){t.memento.restore()}})},substractQty:function(e){this.memento.store();var t=parseInt(this.get("QtyBought"),10);if(0>=t)return!1;t--;var o=this.get("PricePerUnit"),n=Math.ceil(t*o);this.set({QtyBought:t,Price:n}),this.saveDataChanges(e)},addQty:function(e){this.memento.store();var t=parseInt(this.get("QtyBought"),10);t++;var o=this.get("PricePerUnit"),n=Math.ceil(t*o);this.set({QtyBought:t,Price:n}),this.saveDataChanges(e)}}),r=o.Collection.extend({model:a,url:"/api/v1/cartsummary",getData:function(e){this.fetch({reset:!0,data:i.param(e)})},subTotal:function(){var e=0;return this.each(function(t){e+=parseInt(t.get("Price"),10)}),e},qtyTotal:function(){var e=0;return this.each(function(t){e+=parseInt(t.get("QtyBought"),10)}),e}}),s=o.Model.extend({url:"/api/v1/carttotal",getData:function(e){this.fetch({reset:!0,data:i.param(e)})}}),l=o.Model.extend({url:"/api/v1/cart",fetchById:function(e){this.fetch({reset:!0,data:i.param({CartId:e})})}});e.Repository=n.Controller.extend({initialize:function(){},getCartSummary:function(e){var t=i.Deferred(),o=new r;return o.on("reset",function(e){t.resolve(e)}),o.getData(e),t.promise()},getCartTotal:function(e){var t=i.Deferred(),o=new s;return o.on("change",function(e){t.resolve(e)}),o.getData(e),t.promise()},addKuponToCart:function(e,t,o){var n={CartInfo:e.CartInfo,DealId:e.DealId,SelectedKupons:e.SelectedKupons},a=function(e){"function"==typeof t&&t(e)},r=function(){"function"==typeof o&&o()},s=function(){};i.post("/api/v1/addtocart",n,a,"json").fail(r).always(s)},getCart:function(e){var t=i.Deferred(),o=new l;return o.on("change",function(e){t.resolve(e)}),o.fetchById(e),t.promise()}})})}(window.Diskupon),function(e){e.App.module("Cart.CartLink",function(e,t,o,n,i,a){this.startWithParent=!1,e.CartSummaryEmptyView=n.ItemView.extend({template:tpl_cart_summary_empty}),e.CartSummaryItemView=n.ItemView.extend({tagName:"li",className:"media dsk-csi",template:tpl_cart_summary_item,events:{"click .dsk-csi-addQty":"addQty","click .dsk-csi-substractQty":"substractQty","click .dsk-csi-del":"deleteSummaryCartItem"},initialize:function(){this.model.on("change",this.render,this)},addQty:function(e){e.preventDefault(),this.trigger("cartsummaryitem:qtyadded")},substractQty:function(e){e.preventDefault(),this.trigger("cartsummaryitem:qtysubstracted")},deleteSummaryCartItem:function(e){e.preventDefault(),this.trigger("cartsummaryitem:deleted")}}),e.CartSummaryView=n.CompositeView.extend({itemView:e.CartSummaryItemView,template:tpl_cart_summary,itemViewContainer:"#dsk_cartList",emptyView:e.CartSummaryEmptyView,onRender:function(){this.checkListStatus(),this.renderCartTotals(),this.trigger("cartsummary:updatecarttotal")},checkListStatus:function(){this.collection.length>0?this.trigger("cartsummary:notempty"):this.trigger("cartsummary:empty")},renderCartTotals:function(){var e=this.collection.qtyTotal()+" items, subtotal: "+accounting.formatNumber(this.collection.subTotal(),0);this.$el.find(".dsk-cartTotals p span").html(e)}}),e.CartLinkView=n.ItemView.extend({template:tpl_cart_link,events:{"click #dsk_showCartSummary":"showCartSummaryModal","click #dsk_checkoutButton":"navigateCheckout","click #dsk_closeCartButton":"closeThisView"},initialize:function(){a.bindAll(this,"showCartSummaryModal"),this.csView=null,this.csRegion=null},closeThisView:function(){this.$el.find("button.close").trigger("click")},navigateCheckout:function(){this.$el.find("button.close").trigger("click"),o.history.navigate("/checkout",!0)},closeCartSummaryView:function(){this.csView&&this.csView.close()},showLoader:function(){this.$el.find("#cartSummaryModal .loader").show()},hideLoader:function(){this.$el.find("#cartSummaryModal .loader").hide()},showError:function(){this.$el.find("#cartSummaryModal .error-cart").show()},hideError:function(){this.$el.find("#cartSummaryModal .error-cart").hide()},showCartSummaryView:function(t){var n=this,i=t;this.hideError();var a=o.Marionette.Region.extend({el:this.$el.find("#cartSummaryModal #dsk_cartSummaryContainer")}),r=new e.CartSummaryView({collection:i});r.on("itemview:cartsummaryitem:qtyadded",function(e){n.trigger("cartsummary:item:qtyadded",e)}),r.on("itemview:cartsummaryitem:qtysubstracted",function(e){n.trigger("cartsummary:item:qtysubstracted",e)}),r.on("itemview:cartsummaryitem:deleted",function(e){n.trigger("cartsummary:item:deleted",e)}),r.on("cartsummary:updatecarttotal",function(){n.trigger("cartsummary:demandcarttotal")}),r.on("cartsummary:notempty",function(){n.$el.find("#dsk_checkoutButton").prop("disabled",!1),n.$el.find("#dsk_closeCartButton").prop("disabled",!1)}),r.on("cartsummary:empty",function(){n.$el.find("#dsk_checkoutButton").prop("disabled",!0),n.$el.find("#dsk_closeCartButton").prop("disabled",!0)}),this.csView=r,this.csRegion=new a,this.csRegion.show(this.csView)},onRender:function(){var e=this,t=this.$el.find("#cartSummaryModal");t.modal({show:!1}),t.on("show.bs.modal",function(){e.closeCartSummaryView(),e.showLoader()}),t.on("shown.bs.modal",function(){e.trigger("cartsummary:shown")}),this.trigger("cartsummary:demandcarttotal")},renderCartCount:function(e){var t=0,o=0,n={};this.csView?(this.csView.collection.each(function(e){t+=parseInt(e.QtyBought,10)}),n={Kinds:this.csView.collection.length,Qty:t}):(a.each(e.attributes,function(e){t+=parseInt(e.QtyBought,10),o++}),n={Kinds:o,Qty:t}),this.$el.find("#dsk_showCartSummary .badge").html(n.Kinds)},renderCartCountEmpty:function(){this.$el.find("#dsk_showCartSummary .badge").html("0")},showCartSummaryModal:function(e){"undefined"!=typeof e&&e.preventDefault();var t=this.$el.find("#cartSummaryModal");t.modal("show")}}),e.Controller=n.Controller.extend({initialize:function(e){a.bindAll(this,"show","setupEventListeners"),this.ContainerRegion=e.ContainerRegion,this.View=null},setupEventListeners:function(e){var o=this;this.listenTo(e,"cartsummary:shown",function(){var n=t.Cart.controller.getCartInfo();o.getCartSummary({cartInfo:n,success:function(t){e.showCartSummaryView(t)},fail:function(){e.showError()},done:function(){e.hideLoader()}})}),this.listenTo(e,"cartsummary:demandcarttotal",function(){o.updateCartCount()}),this.listenTo(e,"cartsummary:item:qtyadded",function(o){var n=t.Cart.controller.getCartInfo();o.model.addQty(n),e.csView.renderCartTotals(),e.trigger("cartsummary:demandcarttotal")}),this.listenTo(e,"cartsummary:item:qtysubstracted",function(o){var n=t.Cart.controller.getCartInfo();o.model.substractQty(n),e.csView.renderCartTotals(),e.trigger("cartsummary:demandcarttotal")}),this.listenTo(e,"cartsummary:item:deleted",function(o){var n=t.Cart.controller.getCartInfo(),i=o.model.deleteData(n);i.done(function(){o.close(),e.trigger("cartsummary:demandcarttotal")}),i.always(function(){e.csView.checkListStatus(),e.csView.renderCartTotals()})})},show:function(){var t=new e.CartLinkView({el:i("#dsk_cartLinkSection")});this.View=t,this.setupEventListeners(t),this.ContainerRegion.attachView(t),this.ContainerRegion.show(t)},getCartSummary:function(e){var o=new t.Cart.Repository,n=o.getCartSummary(e.cartInfo);n.done(function(t){"function"==typeof e.success&&e.success(t)}),n.fail(function(){"function"==typeof e.fail&&e.fail()}),n.always(function(){"function"==typeof e.done&&e.done()})},getCartTotal:function(e){var o=new t.Cart.Repository,n=o.getCartTotal(e.cartInfo);n.done(function(t){"function"==typeof e.success&&e.success(t)}),n.fail(function(){"function"==typeof e.fail&&e.fail()}),n.always(function(){"function"==typeof e.done&&e.done()})},updateCartCount:function(){var e=t.Cart.controller.getCartInfo(),o=this.View;this.getCartTotal({cartInfo:e,success:function(e){o&&o.renderCartCount(e)},fail:function(){o&&o.renderCartCountEmpty(data)}})}}),e.addInitializer(function(){e.controller=new e.Controller({ContainerRegion:t.regionManager.get("Header")}),t.vent.on("selectkuponandbuy:gotocart",function(){window.scroll(0,0),e.controller.View&&e.controller.View.showCartSummaryModal()}),t.commands.setHandler("updatecartcountaftersuccessfuladdtocart",function(){e.controller.updateCartCount()})})})}(window.Diskupon),function(e){e.App.module("Cart.CartList",function(e,t,o,n,i,a){this.startWithParent=!1;var r=n.ItemView.extend({template:tpl_cart_list,className:"dsk-vcCartList",events:{},initialize:function(){}});e.Controller=n.Controller.extend({initialize:function(e){a.bindAll(this,"show","renderCartList"),this.Region=e.Region},renderCartList:function(e){var t=new r({model:e});this.Region.show(t)},show:function(){var e=this,o=new t.Cart.Repository,n=o.getCart(234);n.done(function(t){e.renderCartList(t)}),n.fail(function(){})}}),e.addInitializer(function(t){e.controller=new e.Controller({Region:t.Region})})})}(window.Diskupon),function(e){e.App.module("Cart",function(e,t,o,n,i){function a(){var e={CartId:parseInt(-1*chance.natural({max:2147483647}),10),Token:chance.guid(),Timestamp:moment().utc().valueOf(),UserId:parseInt(-1*chance.natural({max:2147483647}),10)};return e}e.Controller=n.Controller.extend({initialize:function(){},startCartLinkModule:function(){t.module("Cart.CartLink").start()},stopCartLinkModule:function(){t.module("Cart.CartLink").stop()},getCartInfo:function(){var e,o=t.Storage.getItem("ds_cartInfo"),n=!1;if(o){var r=JSON.parse(o);i.isEmptyObject(r)&&(n=!0)}else n=!0;if(n){e=a();var s=JSON.stringify(e);t.Storage.setItem("ds_cartInfo",s)}return o=t.Storage.getItem("ds_cartInfo"),e=JSON.parse(o)},storeCartInfo:function(e){var o=JSON.stringify(e);t.Storage.setItem("ds_cartInfo",o)},showCartLink:function(){e.CartLink.controller.show()},addKuponToCart:function(e){var o=this,n=this.getCartInfo(),i=new t.Cart.Repository,a={CartInfo:n,DealId:e.Deal.DealId,SelectedKupons:e.SelectedKupons};i.addKuponToCart(a,function(e){var n={CartId:e.CartId,Token:e.Token,Timestamp:e.Timestamp,UserId:e.UserId};o.storeCartInfo(n),t.commands.execute("updatecartcountaftersuccessfuladdtocart"),t.vent.trigger("selectkuponandbuy:success")},function(){t.vent.trigger("selectkuponandbuy:failed")})},checkout:function(){t.module("Checkout").stop(),t.module("Checkout").start(),t.Checkout.controller.show()}}),e.addInitializer(function(){e.controller=new e.Controller({}),t.commands.setHandler("addkupontocart",function(t){e.controller.addKuponToCart(t)})}),e.addFinalizer(function(){e.controller.close(),delete e.controller})})}(window.Diskupon),function(e){e.App.module("Checkout",function(e,t,o,n,i){var a=o.Model.extend({url:"/api/v1/paymentmethods",initialize:function(){},getData:function(){this.fetch({reset:!0})}});e.Repository=n.Controller.extend({initialize:function(){},getPaymentMethods:function(){var e=i.Deferred(),t=new a;return t.on("change",function(t){e.resolve(t)}),cModel.getData(),e.promise()}})})}(window.Diskupon),function(e){e.App.module("Checkout",function(e,t,o,n,i,a){this.startWithParent=!1;var r=n.Layout.extend({template:tpl_checkout,regions:{CartList:"#dsk_vcCartList",PaymentMethods:"#dsk_vcPaymentMethods",CustomerDetails:"#dsk_vcCustomerDetails"},onShow:function(){this.$el.find("#dsk_vcAgreeTC").iCheck({checkboxClass:"icheckbox_flat-green",radioClass:"iradio_flat-green",increaseArea:"20%"})}});e.Controller=n.Controller.extend({initialize:function(){a.bindAll(this,"show","startAndShowCartList","startAndShowPaymentMethods"),this.Layout=new r},startAndShowCartList:function(){t.module("Cart.CartList").stop(),t.module("Cart.CartList").start({Region:this.Layout.CartList}),t.Cart.CartList.controller.show()},startAndShowPaymentMethods:function(){t.module("Checkout.PaymentMethods").stop(),t.module("Checkout.PaymentMethods").start({Region:this.Layout.PaymentMethods}),t.Checkout.PaymentMethods.controller.show()},show:function(){this.Layout.render(),t.regionManager.get("Main").show(this.Layout),this.startAndShowCartList(),this.startAndShowPaymentMethods()}}),e.addInitializer(function(){e.controller=new e.Controller({})})})}(window.Diskupon),function(e){e.App.module("Checkout.PaymentMethods",function(e,t,o,n,i,a){this.startWithParent=!1;var r=n.ItemView.extend({template:tpl_payment_methods,className:"dsk-vcPaymentMethods",events:{},initialize:function(){},onShow:function(){this.$el.find(".rb-paymentMethod").iCheck({checkboxClass:"icheckbox_flat-green",radioClass:"iradio_flat-green",increaseArea:"20%"})}});e.Controller=n.Controller.extend({initialize:function(e){a.bindAll(this,"show","renderPaymentMethods"),this.Region=e.Region},renderPaymentMethods:function(e){var t=new r({model:e});this.Region.show(t)},show:function(){var e=this;e.renderPaymentMethods()}}),e.addInitializer(function(t){e.controller=new e.Controller({Region:t.Region})})})}(window.Diskupon),function(e){e.App.module("Affiliates",function(e,t,o,n,i,a){this.startWithParent=!1,e.AffiliatesView=n.ItemView.extend({template:tpl_affiliates,tagName:"div",className:"",events:{},onRender:function(){this.$el.find("#affiliates_stream").flexslider({animation:"slide",controlNav:!1,animationLoop:!0,slideshow:!0,itemWidth:150,pauseOnAction:!1,pauseOnHover:!1,pausePlay:!1,slideshowSpeed:6e3})}}),e.Controller=n.Controller.extend({initialize:function(e){a.bindAll(this,"show"),this.AffiliatesRegion=e.AffiliatesRegion},show:function(){var t=new e.AffiliatesView({});this.AffiliatesRegion.show(t)}}),e.addInitializer(function(){e.controller=new e.Controller({AffiliatesRegion:t.regionManager.get("Affiliates")})})})}(window.Diskupon),function(e){e.App.module("HomeSlides",function(e,t,o,n,i,a){this.startWithParent=!1,e.on("start",function(){}),e.HomeSlidesView=n.ItemView.extend({template:tpl_home_slides,tagName:"div",className:"",events:{},onRender:function(){}}),e.Controller=n.Controller.extend({initialize:function(e){a.bindAll(this,"show"),this.HomeSlidesRegion=e.HomeSlidesRegion},show:function(){var t=new e.HomeSlidesView({});this.HomeSlidesRegion.show(t)}}),e.addInitializer(function(t){e.controller=new e.Controller({HomeSlidesRegion:t.HomeSlidesRegion})})})}(window.Diskupon),function(e){e.App.module("RegionSelector",function(e,t,o,n,i,a){this.startWithParent=!1,e.SelectRegionView=n.ItemView.extend({template:tpl_region_selector,tagName:"span",className:"dsk-regionPicker",events:{"change #dsk_select_region":"regionChanged"},onRender:function(){this.$el.find("#dsk_select_region").val(t.SelectedRegionId.get())},regionChanged:function(e){e.preventDefault();var t=parseInt(i(e.currentTarget).val(),10);this.trigger("region:changed",t)}}),e.Controller=n.Controller.extend({initialize:function(e){a.bindAll(this,"show","regionChanged"),this.RegionSelectorRegion=e.RegionSelectorRegion},show:function(){var o=this,n=new t.Deals.Repository,i=n.getRegions();i.done(function(t){var n=new e.SelectRegionView({collection:t});o.listenTo(n,"region:changed",o.regionChanged),o.RegionSelectorRegion.show(n)})},regionChanged:function(e){t.SelectedRegionId.set(e),window.location.href="/"}}),e.addInitializer(function(){e.controller=new e.Controller({RegionSelectorRegion:t.regionManager.get("RegionSelector")})})})}(window.Diskupon),function(e){e.App.module("TopMenu",function(e,t,o,n,i,a){this.startWithParent=!1,e.TopMenuItemView=n.ItemView.extend({tagName:"li",template:tpl_top_menu,onBeforeRender:function(){var e=this.model.get("SubCategories");e&&e.length>0?(this.$el.addClass("dropdown"),this.model.set("HasSubCategories",!0)):this.model.set("HasSubCategories",!1);var t=parseInt(this.model.get("CategoryId"),10);this.$el.attr("data-key",t)}}),e.TopMenuCollectionView=n.CollectionView.extend({tagName:"ul",className:"nav nav-pills dsk-topMenuInner",itemView:e.TopMenuItemView,initialize:function(e){a.bindAll(this,"setActiveMenuItem"),this.activeTopMenuKey=e.activeTopMenuKey,this.activeTopMenuSubKey=e.activeTopMenuSubKey},onRender:function(){},onShow:function(){this.trigger("topmenuview:shown")},setActiveMenuItem:function(e){this.$el.find(".active").removeClass("active"),e&&this.$el.find('[data-key="'+e+'"]').addClass("active")}}),e.TopMenuMobileItemView=n.ItemView.extend({tagName:"li",template:tpl_top_menu_mobile,onBeforeRender:function(){var e=this.model.get("SubCategories");e&&e.length>0?(this.$el.addClass("dropdown"),this.model.set("HasSubCategories",!0)):this.model.set("HasSubCategories",!1);var t=parseInt(this.model.get("CategoryId"),10);this.$el.attr("data-key",t)}}),e.TopMenuMobileCollectionView=n.CollectionView.extend({tagName:"ul",className:"nav nav-pills dsk-topMenuInnerMobile",itemView:e.TopMenuMobileItemView,initialize:function(e){a.bindAll(this,"setActiveMenuItem"),this.activeTopMenuKey=e.activeTopMenuKey,this.activeTopMenuSubKey=e.activeTopMenuSubKey},onRender:function(){},onShow:function(){this.trigger("topmenumobileview:shown")},setActiveMenuItem:function(e,t){this.$el.find(".active").removeClass("active");var o=0;t?o=t:e&&(o=e),o&&this.$el.find('[data-key="'+o+'"]').addClass("active")}}),e.Controller=n.Controller.extend({initialize:function(e){a.bindAll(this,"show","setActiveMenuItem"),this.TopMenuRegion=e.TopMenuRegion,this.TopMenuRegionMobile=e.TopMenuRegionMobile,this.TopMenuView=void 0,this.TopMenuMobileView=void 0,this.CategoryId=e.CategoryId,this.SubCategoryId=e.SubCategoryId},show:function(){var o=this,n=new t.Deals.Repository,i=n.getDealCategories();i.done(function(t){var n=new e.TopMenuCollectionView({collection:t});o.listenTo(n,"topmenuview:shown",function(){o.setActiveMenuItem(o.CategoryId,o.SubCategoryId)}),o.TopMenuView=n,o.TopMenuRegion.show(n);var i=new e.TopMenuMobileCollectionView({collection:t});o.listenTo(i,"topmenumobileview:shown",function(){o.setActiveMenuItem(o.CategoryId,o.SubCategoryId)}),o.TopMenuMobileView=i,o.TopMenuRegionMobile.show(i)}),i.fail(function(){}),i.always(function(){})},setActiveMenuItem:function(e,t){"undefined"!=typeof this.TopMenuView&&this.TopMenuView.setActiveMenuItem(e,t),"undefined"!=typeof this.TopMenuMobileView&&this.TopMenuMobileView.setActiveMenuItem(e,t)}}),e.addInitializer(function(o){var n={CategoryId:"",SubCategoryId:0},a=i.extend({},n,o);e.controller=new e.Controller({TopMenuRegion:t.regionManager.get("TopMenuInner"),TopMenuRegionMobile:t.regionManager.get("TopMenuInnerMobile"),CategoryId:a.CategoryId,SubCategoryId:a.SubCategoryId})})})}(window.Diskupon),function(e){e.App.module("Deals",function(t,o,n,i,a,r){t.DealModel=n.Model.extend({initialize:function(){},url:e.requestUrl("deals"),getDeal:function(e){this.fetch({data:a.param(e)})}}),t.DealCollection=n.Collection.extend({model:t.DealModel,url:e.requestUrl("deals"),search:function(e){this.fetch({reset:!0,data:a.param(e)})}}),t.DealCategoryModel=n.Model.extend({initialize:function(){}}),t.DealCategoryCollection=n.Collection.extend({model:t.DealCategoryModel,url:e.requestUrl("dealcategories")}),t.RegionModel=n.Model.extend({initialize:function(){}}),t.RegionCollection=n.Collection.extend({model:t.RegionModel,url:e.requestUrl("regions")}),t.Repository=i.Controller.extend({initialize:function(){r.bindAll(this,"search"),this.defaultSearchParams={RegionId:1,CategoryId:1,PageSize:65e3,PageNumber:1,SearchQuery:""}},search:function(e){var o=a.extend({},this.defaultSearchParams,e),n=a.Deferred(),i=new t.DealCollection;return i.on("reset",function(e){n.resolve(e)}),i.search(o),n.promise()},getOne:function(e){var o=new t.DealModel,n=a.Deferred();return o.on("change",function(e){n.resolve(e)}),o.getDeal({DealId:e}),n.promise()},getDealCategories:function(){var e=a.Deferred(),o=new t.DealCategoryCollection;return o.on("reset",function(t){e.resolve(t)}),o.fetch({reset:!0}),e.promise()},getRegions:function(){var e=a.Deferred(),o=new t.RegionCollection;return o.on("reset",function(t){e.resolve(t)}),o.fetch({reset:!0}),e.promise()}})})}(window.Diskupon),function(e){e.App.module("Deals.Details",function(t,o,n,i,a,r){this.startWithParent=!1,t.on("start",function(){}),t.DealsDetailsView=i.ItemView.extend({template:tpl_deal_details,tagName:"div",className:"dsk-dealDetails",events:{"click #buyThis":"buyThisClicked"},buyThisClicked:function(e){e.preventDefault(),this.trigger("dealdetails:buy")},onRender:function(){},setupSlideShow:function(){this.$el.find("#deal_images_navs").flexslider({animation:"slide",controlNav:!1,animationLoop:!1,slideshow:!1,itemWidth:100,asNavFor:"#deal_images"}),this.$el.find("#deal_images").flexslider({animation:"slide",controlNav:!1,animationLoop:!1,slideshow:!1,sync:"#deal_images_navs"}),this.$el.find(".sliderMain-imgContainer").imgLiquid()},setupMap:function(){var e=this;if("undefined"!=typeof Maplace){var t={disableDefaultUI:!0},o=this.model.toJSON().Locations,n=r.map(o,function(e){var t="<strong>"+e.LocationName+"</strong><p>"+e.LocationAddress+"</p><i>&nbsp;</i>";return{zoom:12,lat:e.Latitude,lon:e.Longitude,title:t,html:t}});new Maplace({locations:n,map_div:"#map_canvas",controls_div:"#map_controls",controls_type:"list",controls_on_map:!1,controls_position:google.maps.ControlPosition.BOTTOM_LEFT,view_all:!1,start:5,map_options:t,afterShow:function(){e.trigger("dealdetails:mapshown")}}).Load()}},loadMap:function(){var e=this;yepnope({test:window.google,yep:["/libs/maplace.min.js"],complete:function(){e.setupMap()}}),"undefined"==typeof window.google&&this.trigger("dealdetails:mapshown")},setupMasonry:function(){var t=this.$el.find(".dsk-dd-detailsContainer").get(0),o=new Masonry(t,{itemSelector:".dsk-dd-details"});window.msnry=o,e.GlobalEvents.tickRelayoutMasonry()},setupPopover:function(){var e=this,t=tpl_kupon_selector(this.model.toJSON());this.$el.find("#buyThis").popover({title:'Choose your Kupon:<button type="button" id="close" class="close" onclick="$(&quot;#buyThis&quot;).popover(&quot;hide&quot;);">&times;</button>',content:t,html:!0,placement:"bottom",trigger:"manual"}),this.$el.find("#buyThis").on("shown.bs.popover",function(){e.$el.find(".chooser").iCheck({checkboxClass:"icheckbox_flat-green",radioClass:"iradio_flat-green",increaseArea:"20%"}),e.$el.find("#dsk_kselectorBuy").prop("disabled",!1)})},setupPopoverEvents:function(){var e=this;this.$el.find(".dsk-dd-buy").on("click","#dsk_kselectorBuy",function(t){t.preventDefault();var o=e.$el.find('input[name="selected_kupon"]:checked');if(o.length<=0)return!1;var n=[];a.each(o,function(e,t){var o=a(t).val(),i=a(t).closest(".list-group-item").find('input[type="text"].kpQty').val();n.push({KuponId:o,Qty:i})}),e.trigger("dealdetails:selectkuponandbuy",{SelectedKupons:n,Deal:e.model.toJSON()})}),this.$el.find(".dsk-dd-buy").on("click","#dsk_kselectorCancel",function(t){t.preventDefault(),e.$el.find("#buyThis").popover("hide")}),this.$el.find(".dsk-dd-buy").on("click","#ks_gotocart",function(t){t.preventDefault(),o.vent.trigger("selectkuponandbuy:gotocart"),e.hideKuponSelector()}),this.$el.find(".dsk-dd-buy").on("click",".ks-close",function(t){t.preventDefault(),e.hideKuponSelector()}),this.$el.find(".dsk-dd-buy").on("blur",".kpQty",function(){var e=parseInt(a(this).val(),10);isNaN(e)&&a(this).val(0)})},blockKuponSelector:function(){this.$el.find(".popover-content").block({message:"<h1>adding to cart</h1>",fadeIn:700})},unblockKuponSelector:function(){this.$el.find(".popover-content").unblock({fadeOut:700})},showKuponSelector:function(){this.$el.find("#buyThis").popover("toggle")},hideKuponSelector:function(){this.$el.find("#buyThis").popover("hide")},onShow:function(){this.setupSlideShow(),this.loadMap(),this.setupPopover(),this.setupPopoverEvents()}});var s=n.Marionette.Layout.extend({template:tpl_deal_details_page,regions:{MainContent:"#dsk_content"},className:"container"});t.Controller=i.Controller.extend({initialize:function(){r.bindAll(this,"showDealsDetails","renderDealsDetails","renderDetailsLayout"),this.Layout=new s,this.DealId=0},renderDetailsLayout:function(){this.Layout.render(),o.regionManager.get("Main").show(this.Layout)},renderDealsDetails:function(n){var i=this,a=new t.DealsDetailsView({model:n});this.listenTo(a,"dealdetails:buy",function(){i.buyThisDealHandler(a)}),this.listenTo(a,"dealdetails:selectkuponandbuy",function(e){o.vent.on("selectkuponandbuy:success",function(){setTimeout(function(){var e='item was added to cart<br/><br/><button type="button" id="ks_gotocart" class="wisteria-flat-button btn-xs">go to cart&nbsp;<i class="fa fa-arrow-up"></i></button>&nbsp;&nbsp;&nbsp;<button type="button" class="ks-close carrot-flat-button btn-xs">keep shopping&nbsp;<i class="fa fa-times"></i></button>';a.$el.find(".blockUI.blockMsg h1").html(e),a.$el.find(".blockUI.blockMsg h1").html(em)},1e3)}),o.vent.on("selectkuponandbuy:failed",function(){setTimeout(function(){var e='item(s) was not added to cart<br/>refresh page<br/>and try again<br/><br/><button type="button" class="ks-close carrot-flat-button btn-xs">keep shopping&nbsp;<i class="fa fa-times"></i></button>';a.$el.find(".blockUI.blockMsg h1").html(e)},1e3)}),a.blockKuponSelector(),o.commands.execute("addkupontocart",e)}),this.listenTo(a,"dealdetails:mapshown",function(){a.setupMasonry()}),this.Layout.MainContent.show(a);var r=n.toJSON();o.TopMenu.controller.setActiveMenuItem(e.DealCategory.ByCategory,r.DealCategoryId)},showDealsDetails:function(){var e=this,t=new o.Deals.Repository,n=t.getOne(this.DealId);n.done(function(t){e.renderDetailsLayout(),e.renderDealsDetails(t)})},buyThisDealHandler:function(e){e.model.toJSON();e.showKuponSelector()}}),t.addInitializer(function(){t.controller=new t.Controller({})
-}),t.addFinalizer(function(){t.controller.close(),delete t.controller})})}(window.Diskupon),function(e){e.App.module("Deals.List",function(t,o,n,i,a,r){this.startWithParent=!1,t.on("start",function(){}),t.DealsListItemView=i.ItemView.extend({template:tpl_deals_item,tagName:"div",className:"dsk-dealContainer pull-left"}),t.DealsListCollectionView=i.CollectionView.extend({tagName:"div",className:"dsk-listOfDeals clearfix",itemView:t.DealsListItemView,onRender:function(){this.$el.find(".dsk-di-cover").lazyload({}),this.$el.find(".dsk-dealItem").hover(function(){a(this).addClass("hover")},function(){a(this).removeClass("hover")})}}),t.DealsListMobileItemView=i.ItemView.extend({template:tpl_deals_item_mobile,tagName:"div",className:"dsk-dealContainer-mobile clearfix"}),t.DealsListMobileCollectionView=i.CollectionView.extend({tagName:"div",className:"dsk-listOfDeals-mobile clearfix",itemView:t.DealsListMobileItemView,onRender:function(){this.$el.find(".dsk-di-cover-mobile").lazyload({})}});var s=n.Marionette.Layout.extend({template:tpl_deals_list_page,regions:{HomeSlides:"#dsk_homeSlides",MainContent:"#dsk_content",MainContentMobile:"#dsk_content_mobile"},className:"container"});t.Controller=i.Controller.extend({initialize:function(){r.bindAll(this,"showDeals","renderDeals"),this.SearchParams={RegionId:1,CategoryId:e.DealCategory.All,PageNumber:1,SearchQuery:""},this.Layout=new s},renderListLayout:function(){this.Layout.render(),o.regionManager.get("Main").show(this.Layout)},renderHomeSlides:function(){o.module("HomeSlides").start({HomeSlidesRegion:this.Layout.HomeSlides}),o.HomeSlides.controller.show(),o.module("HomeSlides").stop()},renderDeals:function(e){if(a(this.Layout.MainContent.el).is(":visible")){var o=new t.DealsListCollectionView({collection:e});this.Layout.MainContent.show(o),this.trigger("dealslist:listshown")}if(a(this.Layout.MainContentMobile.el).is(":visible")){var n=new t.DealsListMobileCollectionView({collection:e});this.Layout.MainContentMobile.show(n),this.trigger("dealslist:listmobileshown")}},showDeals:function(){var e=this,t=new o.Deals.Repository;this.SearchParams.RegionId=o.SelectedRegionId.get();var n=t.search(this.SearchParams);n.done(function(t){e.renderListLayout(),e.renderHomeSlides(),e.renderDeals(t)})}}),t.addInitializer(function(){t.controller=new t.Controller({}),t.controller.on("dealslist:listshown",function(){a(window).trigger("scroll")}),t.controller.on("dealslist:listmobileshown",function(){a(window).trigger("scroll")})}),t.addFinalizer(function(){t.controller.close(),delete t.controller})})}(window.Diskupon),function(e){e.App.module("Deals",function(t,o,n,i,a,r){t.on("start",function(){}),t.Controller=i.Controller.extend({initialize:function(){r.bindAll(this,"showDealsList","showDealDetails")},stopSubmodule:function(){o.module("Deals.List").stop(),o.module("Deals.Details").stop(),o.module("Deals.TopDeals").stop()},startListSubmodule:function(){this.stopSubmodule(),o.module("Deals.List").start()},startDetailsModule:function(){this.stopSubmodule(),o.module("Deals.Details").start()},startTopDealsModule:function(){this.stopSubmodule(),o.module("Deals.TopDeals").start()},showDealsList:function(o){this.startListSubmodule();var n={categoryId:e.DealCategory.All,searchQuery:""};o=a.extend({},n,o),t.List.controller.SearchParams.CategoryId=o.categoryId,t.List.controller.SearchParams.SearchQuery=o.searchQuery,t.List.controller.showDeals()},showDealDetails:function(e){this.startDetailsModule(),t.Details.controller.DealId=e,t.Details.controller.showDealsDetails()},showTopDealsGroupByCategory:function(){this.startTopDealsModule(),t.TopDeals.controller.showTopDeals()}}),t.addInitializer(function(){t.controller=new t.Controller({})}),t.addFinalizer(function(){t.controller.close(),delete t.controller})})}(window.Diskupon),function(e){e.App.module("Deals.TopDeals",function(e,t,o,n){this.startWithParent=!1;var i=o.Marionette.Layout.extend({template:tpl_top_deals_page,regions:{HomeSlides:"#dsk_homeSlides",MainContent:"#dsk_content",MainContentMobile:"#dsk_content_mobile"},className:"container"});e.Controller=n.Controller.extend({initialize:function(){this.Layout=new i},renderTopDealsLayout:function(){this.Layout.render(),t.regionManager.get("Main").show(this.Layout)},renderHomeSlides:function(){t.module("HomeSlides").start({HomeSlidesRegion:this.Layout.HomeSlides}),t.HomeSlides.controller.show(),t.module("HomeSlides").stop()},showTopDeals:function(){this.renderTopDealsLayout(),this.renderHomeSlides()}}),e.addInitializer(function(){e.controller=new e.Controller({})}),e.addFinalizer(function(){e.controller.close(),delete e.controller})})}(window.Diskupon),function(e){e.GlobalEvents={tickRelayoutMasonry:function(){if("undefined"!=typeof window.msnry){window.msnry.layout();var e=0,t=window.setInterval(function(){window.msnry.layout(),e++,e>30&&window.clearInterval(t)},300)}}}}(window.Diskupon),function(e){e(document).ajaxStart(function(){NProgress&&NProgress.start()}),e(document).ajaxStop(function(){NProgress&&NProgress.done(!0)})}(jQuery),window.onerror=function(e){console.log(e),NProgress&&NProgress.done(!0)};
+(function(/*! Brunch !*/) {
+  'use strict';
+
+  var globals = typeof window !== 'undefined' ? window : global;
+  if (typeof globals.require === 'function') return;
+
+  var modules = {};
+  var cache = {};
+
+  var has = function(object, name) {
+    return ({}).hasOwnProperty.call(object, name);
+  };
+
+  var expand = function(root, name) {
+    var results = [], parts, part;
+    if (/^\.\.?(\/|$)/.test(name)) {
+      parts = [root, name].join('/').split('/');
+    } else {
+      parts = name.split('/');
+    }
+    for (var i = 0, length = parts.length; i < length; i++) {
+      part = parts[i];
+      if (part === '..') {
+        results.pop();
+      } else if (part !== '.' && part !== '') {
+        results.push(part);
+      }
+    }
+    return results.join('/');
+  };
+
+  var dirname = function(path) {
+    return path.split('/').slice(0, -1).join('/');
+  };
+
+  var localRequire = function(path) {
+    return function(name) {
+      var dir = dirname(path);
+      var absolute = expand(dir, name);
+      return globals.require(absolute, path);
+    };
+  };
+
+  var initModule = function(name, definition) {
+    var module = {id: name, exports: {}};
+    cache[name] = module;
+    definition(module.exports, localRequire(name), module);
+    return module.exports;
+  };
+
+  var require = function(name, loaderPath) {
+    var path = expand(name, '.');
+    if (loaderPath == null) loaderPath = '/';
+
+    if (has(cache, path)) return cache[path].exports;
+    if (has(modules, path)) return initModule(path, modules[path]);
+
+    var dirIndex = expand(path, './index');
+    if (has(cache, dirIndex)) return cache[dirIndex].exports;
+    if (has(modules, dirIndex)) return initModule(dirIndex, modules[dirIndex]);
+
+    throw new Error('Cannot find module "' + name + '" from '+ '"' + loaderPath + '"');
+  };
+
+  var define = function(bundle, fn) {
+    if (typeof bundle === 'object') {
+      for (var key in bundle) {
+        if (has(bundle, key)) {
+          modules[key] = bundle[key];
+        }
+      }
+    } else {
+      modules[bundle] = fn;
+    }
+  };
+
+  var list = function() {
+    var result = [];
+    for (var item in modules) {
+      if (has(modules, item)) {
+        result.push(item);
+      }
+    }
+    return result;
+  };
+
+  globals.require = require;
+  globals.require.define = define;
+  globals.require.register = define;
+  globals.require.list = list;
+  globals.require.brunch = true;
+})();
+/********************************/
+/*
+/* Diskupon Starts Here
+/*
+/********************************/
+window.Diskupon = {
+    DealCategory: {
+        All: -11,
+        New: -22,
+        Hot: -33,
+        EndingSoon: -44,
+        ByCategory: -55,
+        Honeymoon: -66
+    },
+    //API_HOST: 'diskupon.api',
+    API_HOST: 'diskupon.apphb.com',
+    requestUrl: function (slug) {
+        if (slug.substring(0, 1) === '/') {
+            return '//' + this.API_HOST + slug;
+        } else {
+            return '//' + this.API_HOST + '/api/' + slug;
+        }
+    }
+};
+
+(function (diskupon) {
+    diskupon.App = new Marionette.Application();
+    var App = diskupon.App;
+
+    /*** regions and layouts ***/
+    App.regionManager = new Marionette.RegionManager();
+    App.regionManager.addRegions({
+        Header: '#dsk_header',
+        RegionSelector: '#dsk_pick_region',
+        TopMenu: '#dsk_topMenu',
+        TopMenuInner: '#dsk_topMenu_Inner',
+        TopMenuInnerMobile: '#dsk_topMenu_Inner_Mobile',
+        Main: '#dsk_main',
+        Affiliates: '#dsk_affiliates',
+        Footer: '#dsk_footer'
+    });
+
+    /*** event handlers ***/
+    App.on('start', function () {
+        if (Backbone.history){
+            Backbone.history.start({ pushState: true });
+            prepareBackbonePushState();
+        }
+    });
+
+
+    /**************************************************************************************/
+    // todo: we can move this to a view
+    var headerElementId = App.regionManager.get('Header').el;
+    $(document).on('click', (headerElementId + ' #dsk_searchDeals_submit'), function (e) {
+        $(headerElementId + ' #dsk_searchDeals_form').submit();
+        e.preventDefault();
+        return false;
+    });
+    $(document).on('submit', (headerElementId + ' #dsk_searchDeals_form'), function (e) {
+        var query = $(headerElementId + ' #dsk_searchDeals_query').val().trim();
+        if (query) {
+            var encodedQuery = encode(query);
+            window.location.href = '/kupons/search/' + encodedQuery;
+            //Backbone.history.navigate('/kupons/search/' + encodedQuery, true);
+        }
+        e.preventDefault();
+        return false;
+    });
+    $(document).on('click', '.dsk-topMenuInnerMobile li a', function (e) {
+        var isCollapsed = $('.dsk-navtoggle').hasClass('collapsed');
+        if (!isCollapsed) {
+            $('.dsk-navtoggle').trigger('click');
+        }
+    });
+    $(window).load(function () {
+        // not sure.. so comment :D
+        //diskupon.GlobalEvents.tickRelayoutMasonry();
+    });
+    $(window).resize(function () {
+        if (typeof window.msnry !== 'undefined') {
+            window.msnry.layout();
+        }
+    });
+    // end todo
+    /**************************************************************************************/
+
+
+    /*** others ***/
+    App.SelectedRegionId = {
+        get: function () {
+            var ls = App.Storage.getItem('ds_regionid');
+            if (ls === null) {
+                ls = '2'; // change this with jakarta id
+            }
+            var selectedRegionId = parseInt(ls, 10);
+            return selectedRegionId;
+        },
+        set: function (value) {
+            App.Storage.setItem('ds_regionid', value.toString());
+        }
+    };
+
+    // can be cookie? but now localStorage
+    App.Storage = {};
+    var lsStorage = {
+        setItem: function (key, value) {
+            localStorage.setItem(key, value);
+        },
+        getItem: function (key) {
+            return localStorage.getItem(key);
+        }
+    };
+    var dStorage = {
+        setItem: function (key, value) {
+        },
+        getItem: function (key) {
+            return '';
+        }
+    };
+    if (typeof localStorage !== 'undefined') {
+        App.Storage = lsStorage;
+    } else {
+        App.Storage = dStorage;
+    }
+
+} (window.Diskupon));
+;(function (diskupon, App) {
+
+    diskupon.AppRouter = Backbone.Marionette.AppRouter.extend({
+
+    });
+
+    App.addInitializer(function () {
+        new diskupon.AppRouter({
+            controller: window.AppRouterController,
+            appRoutes: {
+                "": "showHomePage",
+                "kupons/all": "showAllKuponsPage",
+                "kupons/new": "showNewKuponsPage",
+                "kupons/endingsoon": "showEndingSoonKuponsPage",
+                "kupons/hot": "showHotKuponsPage",
+                "kupons/category/:id/:name": "showKuponsByCategory",
+                "kupons/honeymoon": "showHoneymoon",
+                "kupons/details/:id/:name": "showKuponDetails",
+                "kupons/search/:query": "searchForKupons",
+                "checkout": "checkout"
+            }
+        });
+    });
+
+} (window.Diskupon, window.Diskupon.App));
+;(function (arc, diskupon, App) {
+
+    var cc = {
+        checkout: function () {
+            this.showHeader();
+            this.showAffiliates();
+            App.Cart.controller.checkout();
+        }
+    };
+
+    $.extend(arc, cc);
+
+} (window.AppRouterController = window.AppRouterController || {}, window.Diskupon, window.Diskupon.App));
+;(function (arc, diskupon, App) {
+
+    var ec = {
+        stopHeaderModules: function () {
+            App.module('RegionSelector').stop();
+            App.module('TopMenu').stop();
+            App.Cart.controller.stopCartLinkModule();
+        },
+
+        startHeaderModules: function (options) {
+            App.module('RegionSelector').start();
+            App.module('TopMenu').start(options);
+            App.Cart.controller.startCartLinkModule();
+        },
+
+        showHeader: function (options) {
+            this.stopHeaderModules();
+            this.startHeaderModules(options);
+
+            App.Cart.controller.showCartLink();
+            App.RegionSelector.controller.show();
+            App.TopMenu.controller.show();
+        },
+
+        showAffiliates: function () {
+            App.module('Affiliates').stop();
+            App.module('Affiliates').start();
+
+            App.Affiliates.controller.show();
+        }
+    };
+
+    $.extend(arc, ec);
+
+} (window.AppRouterController = window.AppRouterController || {}, window.Diskupon, window.Diskupon.App));
+;(function (arc, diskupon, App) {
+
+    var kr = {
+        showHomePage: function () {
+            this.showHeader();
+            this.showAffiliates();
+            App.Deals.controller.showTopDealsGroupByCategory();
+        },
+
+        showAllKuponsPage: function () {
+            this.showHeader({
+                CategoryId: diskupon.DealCategory.All
+            });
+            this.showAffiliates();
+            App.Deals.controller.showDealsList({
+                categoryId: diskupon.DealCategory.All,
+                searchQuery: ''
+            });
+        },
+
+        showNewKuponsPage: function () {
+            this.showHeader({
+                CategoryId: diskupon.DealCategory.New
+            });
+            this.showAffiliates();
+            App.Deals.controller.showDealsList({
+                categoryId: diskupon.DealCategory.New,
+                searchQuery: ''
+            });
+        },
+
+        showEndingSoonKuponsPage: function () {
+            this.showHeader({
+                CategoryId: diskupon.DealCategory.EndingSoon
+            });
+            this.showAffiliates();
+            App.Deals.controller.showDealsList({
+                categoryId: diskupon.DealCategory.EndingSoon,
+                searchQuery: ''
+            });
+        },
+
+        showHotKuponsPage: function () {
+            this.showHeader({
+                CategoryId: diskupon.DealCategory.Hot
+            });
+            this.showAffiliates();
+            App.Deals.controller.showDealsList({
+                categoryId: diskupon.DealCategory.Hot,
+                searchQuery: ''
+            });
+        },
+
+        showKuponsByCategory: function (id, name) {
+            this.showHeader({
+                CategoryId: diskupon.DealCategory.ByCategory,
+                SubCategoryId: id
+            });
+            this.showAffiliates();
+            App.Deals.controller.showDealsList({
+                categoryId: id,
+                searchQuery: ''
+            });
+        },
+
+        showHoneymoon: function () {
+            this.showHeader({
+                CategoryId: diskupon.DealCategory.Honeymoon
+            });
+            this.showAffiliates();
+        },
+
+        showKuponDetails: function (id, name) {
+            this.showHeader();
+            this.showAffiliates();
+            App.Deals.controller.showDealDetails(id);
+        },
+
+        searchForKupons: function (query) {
+            this.showHeader({
+                CategoryId: diskupon.DealCategory.All
+            });
+            this.showAffiliates();
+            App.Deals.controller.showDealsList({
+                categoryId: diskupon.DealCategory.All,
+                searchQuery: query
+            });
+        }
+    };
+
+    $.extend(arc, kr);
+
+} (window.AppRouterController = window.AppRouterController || {}, window.Diskupon, window.Diskupon.App));
+;(function (diskupon) {
+    diskupon.App.module("Cart", function (Cart, App, Backbone, Marionette, $, _) {
+
+        var CartSummaryModel = Backbone.Model.extend({
+            idAttribute: 'CartSummaryItemId',
+            url: '/api/v1/cartsummary',
+            initialize: function () {
+                if (typeof Backbone.Memento !== 'undefined') {
+                    this.memento = new Backbone.Memento(this);
+                    //this.restart = this.memento.restart;
+                }
+            },
+            deleteData: function (params) {
+                //this.memento.store();
+                var dis = this;
+                var d = $.Deferred();
+                this.destroy({
+                    data: {
+                        CartSummaryItemId: this.id,
+                        KuponId: this.get('KuponId'),
+                        CartInfo: params
+                    },
+                    wait: true,
+                    //processData: true,
+                    success: function (model, response, options) {
+                        d.resolve();
+                    },
+                    error: function (model, xhr, options) {
+                        d.reject();
+                    }
+                });
+                return d.promise();
+            },
+            saveDataChanges: function (params) {
+                var dis = this;
+                var data = this.changedAttributes();
+                data.CartInfo = params;
+                this.save(data, {
+                    wait: true,
+                    success: function (model, response, options) {
+                    },
+                    error: function (model, response, options) {
+                        dis.memento.restore();
+                    }
+                });
+            },
+            substractQty: function (params) {
+                this.memento.store();
+
+                /*** update ***/
+                var qty = parseInt(this.get('QtyBought'), 10);
+                if (qty <= 0) {
+                    return false;
+                }
+                qty--;
+                var ppu = this.get('PricePerUnit');
+                var price = Math.ceil(qty * ppu);
+                this.set({ QtyBought: qty, Price: price });
+                /*** end update ***/
+
+                this.saveDataChanges(params);
+            },
+            addQty: function (params) {
+                this.memento.store();
+
+                /*** update ***/
+                var qty = parseInt(this.get('QtyBought'), 10);
+                qty++;
+                var ppu = this.get('PricePerUnit');
+                var price = Math.ceil(qty * ppu);
+                this.set({ QtyBought: qty, Price: price });
+                /*** end update ***/
+
+                this.saveDataChanges(params);
+            }
+        });
+
+        var CartSummaryCollection = Backbone.Collection.extend({
+            model: CartSummaryModel,
+            url: '/api/v1/cartsummary',
+            getData: function (params) {
+                this.fetch({ reset: true, data: $.param(params) });
+            },
+            subTotal: function () {
+                var st = 0;
+                this.each(function (m) {
+                    st += parseInt(m.get('Price'), 10);
+                });
+                return st;
+            },
+            qtyTotal: function () {
+                var q = 0;
+                this.each(function (m) {
+                    q += parseInt(m.get('QtyBought'), 10);
+                });
+                return q;
+            }
+        });
+
+        var CartTotalModel = Backbone.Model.extend({
+            url: '/api/v1/carttotal',
+            getData: function (params) {
+                this.fetch({ reset: true, data: $.param(params) });
+            }
+        });
+
+        /*
+            Cart model:
+            CartId,
+            CartToken,
+            CustomerId,
+            CartTimestamp,
+            CartItems,
+            CreatedDate,
+            UpdatedDate
+        */
+        var CartModel = Backbone.Model.extend({
+            url: '/api/v1/cart',
+            fetchById: function (cartId) {
+                this.fetch({ reset: true, data: $.param({ CartId: cartId }) });
+            }
+        });
+
+        /*
+            Cart Item Model:
+            CartItemId,
+            CartId,
+            DealId,
+            KuponId,
+            QtyBought,
+            CreatedDate,
+            UpdatedDate
+        */
+        // var CartItemModel = Backbone.Model.extend({
+        //     idAttribute: 'CartItemId',
+        //     url: '/api/v1/cart',
+        //     initialize: function () {
+        //         if (typeof Backbone.Memento !== 'undefined') {
+        //             this.memento = new Backbone.Memento(this);
+        //         }
+        //     }
+        // });
+
+        /*** Repositories ***/
+        Cart.Repository = Marionette.Controller.extend({
+            initialize: function () {
+                //_.bindAll(this, 'search');
+            },
+
+            getCartSummary: function (params) {
+                var deferred = $.Deferred();
+
+                var cisColl = new CartSummaryCollection();
+                cisColl.on('reset', function (cis) {
+                    deferred.resolve(cis);
+                });
+                cisColl.getData(params);
+
+                return deferred.promise();
+            },
+
+            getCartTotal: function (params) {
+                var deferred = $.Deferred();
+
+                var ctModel = new CartTotalModel();
+                ctModel.on('change', function (cartTotal) {
+                    deferred.resolve(cartTotal);
+                });
+                ctModel.getData(params);
+
+                return deferred.promise();
+            },
+
+            addKuponToCart: function (params, success, fail) {
+                var params2 = {
+                    CartInfo: params.CartInfo,
+                    DealId: params.DealId,
+                    SelectedKupons: params.SelectedKupons
+                };
+                var cb = function (data, textStatus, jqXHR) {
+                    if (typeof success === 'function') {
+                        success(data);
+                    }
+                };
+                var f = function () {
+                    if (typeof fail === 'function') {
+                        fail();
+                    }
+                };
+                var a = function () {
+
+                };
+                $.post('/api/v1/addtocart', params2, cb, 'json').fail(f).always(a);
+            },
+
+            getCart: function (cartId) {
+                var deferred = $.Deferred();
+
+                var cModel = new CartModel();
+                cModel.on('change', function (cartModel) {
+                    deferred.resolve(cartModel);
+                });
+                cModel.fetchById(cartId);
+
+                return deferred.promise();
+            }
+        });
+
+    });
+} (window.Diskupon));
+;(function (diskupon) {
+    diskupon.App.module("Cart.CartLink", function (CartLink, App, Backbone, Marionette, $, _) {
+
+        this.startWithParent = false;
+
+        CartLink.CartSummaryEmptyView = Marionette.ItemView.extend({
+            template: tpl_cart_summary_empty
+        });
+
+        /// item view for cart summary
+        CartLink.CartSummaryItemView = Marionette.ItemView.extend({
+            tagName: 'li',
+            className: 'media dsk-csi',
+            template: tpl_cart_summary_item,
+            events: {
+                'click .dsk-csi-addQty': 'addQty',
+                'click .dsk-csi-substractQty': 'substractQty',
+                'click .dsk-csi-del': 'deleteSummaryCartItem'
+            },
+            initialize: function () {
+                this.model.on('change', this.render, this);
+            },
+            /// add qty of an item, trigger event to parent view
+            addQty: function (e) {
+                e.preventDefault();
+                this.trigger('cartsummaryitem:qtyadded');
+            },
+            /// substract qty of an item, trigger event to parent view
+            substractQty: function (e) {
+                e.preventDefault();
+                this.trigger('cartsummaryitem:qtysubstracted');
+            },
+            /// delete the cart item, trigger event to parent view
+            deleteSummaryCartItem: function (e) {
+                e.preventDefault();
+                this.trigger('cartsummaryitem:deleted');
+            }
+        });
+
+        /// cart summary view, holding list of cart items in a summary view
+        CartLink.CartSummaryView = Marionette.CompositeView.extend({
+            itemView: CartLink.CartSummaryItemView,
+            template: tpl_cart_summary,
+            itemViewContainer: '#dsk_cartList',
+            emptyView: CartLink.CartSummaryEmptyView,
+            onRender: function () {
+                var dis = this;
+                this.checkListStatus();
+                this.renderCartTotals();
+                // refresh the cart total after open
+                this.trigger('cartsummary:updatecarttotal');
+            },
+            checkListStatus: function () {
+                if (this.collection.length > 0) {
+                    this.trigger('cartsummary:notempty');
+                } else {
+                    this.trigger('cartsummary:empty');
+                }
+            },
+            renderCartTotals: function () {
+                //2 items : 2,324,534
+                var ct = this.collection.qtyTotal() + ' items, subtotal: ' + accounting.formatNumber(this.collection.subTotal(), 0);
+                this.$el.find('.dsk-cartTotals p span').html(ct);
+            }
+        });
+
+        CartLink.CartLinkView = Marionette.ItemView.extend({
+            template: tpl_cart_link,
+            events: {
+                'click #dsk_showCartSummary': 'showCartSummaryModal',
+                'click #dsk_checkoutButton': 'navigateCheckout',
+                'click #dsk_closeCartButton': 'closeThisView'
+            },
+            initialize: function () {
+                _.bindAll(this, 'showCartSummaryModal');
+                this.csView = null;
+                this.csRegion = null;
+            },
+            closeThisView: function () {
+                this.$el.find('button.close').trigger('click');
+            },
+            navigateCheckout: function () {
+                //window.location.href = '/checkout';
+                this.$el.find('button.close').trigger('click');
+                Backbone.history.navigate('/checkout', true);
+            },
+            closeCartSummaryView: function () {
+                if (this.csView) {
+                    this.csView.close();
+                }
+            },
+            showLoader: function () {
+                this.$el.find('#cartSummaryModal .loader').show();
+            },
+            hideLoader: function () {
+                this.$el.find('#cartSummaryModal .loader').hide();
+            },
+            showError: function () {
+                this.$el.find('#cartSummaryModal .error-cart').show();
+            },
+            hideError: function () {
+                this.$el.find('#cartSummaryModal .error-cart').hide();
+            },
+            showCartSummaryView: function (data) {
+                var dis = this;
+                /// data is a backbone collection
+                var models = data;
+                // hide error message
+                this.hideError();
+
+                // prepare viewing are and view
+                var cartSummaryRegion = Backbone.Marionette.Region.extend({
+                    el: this.$el.find('#cartSummaryModal #dsk_cartSummaryContainer')
+                });
+
+                var cartSummaryView = new CartLink.CartSummaryView({
+                    collection: models
+                });
+
+                cartSummaryView.on('itemview:cartsummaryitem:qtyadded', function (itemView) {
+                    dis.trigger('cartsummary:item:qtyadded', itemView);
+                });
+
+                cartSummaryView.on('itemview:cartsummaryitem:qtysubstracted', function (itemView) {
+                    dis.trigger('cartsummary:item:qtysubstracted', itemView);
+                });
+
+                cartSummaryView.on('itemview:cartsummaryitem:deleted', function (itemView) {
+                    dis.trigger('cartsummary:item:deleted', itemView);
+                });
+
+                cartSummaryView.on('cartsummary:updatecarttotal', function (itemView) {
+                    dis.trigger('cartsummary:demandcarttotal');
+                });
+
+                cartSummaryView.on('cartsummary:notempty', function () {
+                    dis.$el.find('#dsk_checkoutButton').prop('disabled', false);
+                    dis.$el.find('#dsk_closeCartButton').prop('disabled', false);
+                });
+
+                cartSummaryView.on('cartsummary:empty', function () {
+                    dis.$el.find('#dsk_checkoutButton').prop('disabled', true);
+                    dis.$el.find('#dsk_closeCartButton').prop('disabled', true);
+                });
+
+                this.csView = cartSummaryView;
+                this.csRegion = new cartSummaryRegion();
+                this.csRegion.show(this.csView);
+            },
+            onRender: function () {
+                var dis = this;
+                var a = this.$el.find('#cartSummaryModal');
+
+                a.modal({ show: false });
+
+                a.on('show.bs.modal', function () {
+                    dis.closeCartSummaryView();
+                    dis.showLoader();
+                });
+
+                a.on('shown.bs.modal', function () {
+                    dis.trigger('cartsummary:shown');
+                });
+
+                this.trigger('cartsummary:demandcarttotal');
+            },
+            renderCartCount: function (cartTotalModel) {
+                var q = 0,
+                    k = 0,
+                    j = {};
+                if (this.csView) {
+                    this.csView.collection.each(function (m) {
+                        q += parseInt(m.QtyBought, 10);
+                    });
+                    j = {
+                        Kinds: this.csView.collection.length,
+                        Qty: q
+                    };
+                } else {
+                    _.each(cartTotalModel.attributes, function (m) {
+                        q += parseInt(m.QtyBought, 10);
+                        k++;
+                    });
+                    j = {
+                        Kinds: k,
+                        Qty: q
+                    };
+                }
+                this.$el.find('#dsk_showCartSummary .badge').html(j.Kinds);
+            },
+            renderCartCountEmpty: function () {
+                this.$el.find('#dsk_showCartSummary .badge').html('0');
+            },
+            showCartSummaryModal: function (e) {
+                if (typeof e !== 'undefined') {
+                    e.preventDefault();
+                }
+                var a = this.$el.find('#cartSummaryModal');
+                a.modal('show');
+            }
+        });
+
+        CartLink.Controller = Marionette.Controller.extend({
+            initialize: function (options) {
+                _.bindAll(this, 'show', 'setupEventListeners');
+                this.ContainerRegion = options.ContainerRegion;
+                this.View = null;
+            },
+
+            setupEventListeners: function (cartLinkView) {
+                var dis = this;
+                // cart link view event - user/customer demand to show cart summary
+                this.listenTo(cartLinkView, 'cartsummary:shown', function () {
+                    var ci = App.Cart.controller.getCartInfo();
+                    dis.getCartSummary({
+                        cartInfo: ci,
+                        success: function (data) {
+                            cartLinkView.showCartSummaryView(data);
+                        },
+                        fail: function () {
+                            cartLinkView.showError();
+                        },
+                        done: function () {
+                            cartLinkView.hideLoader();
+                        }
+                    });
+                });
+                // cart total badge besides cart link
+                this.listenTo(cartLinkView, 'cartsummary:demandcarttotal', function () {
+                    dis.updateCartCount();
+                });
+                this.listenTo(cartLinkView, 'cartsummary:item:qtyadded', function (itemView) {
+                    var ci = App.Cart.controller.getCartInfo();
+                    itemView.model.addQty(ci);
+                    cartLinkView.csView.renderCartTotals();
+                    cartLinkView.trigger('cartsummary:demandcarttotal');
+                });
+                this.listenTo(cartLinkView, 'cartsummary:item:qtysubstracted', function (itemView) {
+                    var ci = App.Cart.controller.getCartInfo();
+                    itemView.model.substractQty(ci);
+                    cartLinkView.csView.renderCartTotals();
+                    cartLinkView.trigger('cartsummary:demandcarttotal');
+                });
+                this.listenTo(cartLinkView, 'cartsummary:item:deleted', function (itemView) {
+                    var ci = App.Cart.controller.getCartInfo();
+                    var p = itemView.model.deleteData(ci);
+                    p.done(function () {
+                        itemView.close();
+                        cartLinkView.trigger('cartsummary:demandcarttotal');
+                    });
+                    p.always(function () {
+                        cartLinkView.csView.checkListStatus();
+                        cartLinkView.csView.renderCartTotals();
+                    });
+                });
+            },
+
+            show: function () {
+                var cartLinkView = new CartLink.CartLinkView({
+                    el: $("#dsk_cartLinkSection")
+                });
+                this.View = cartLinkView;
+                this.setupEventListeners(cartLinkView);
+                this.ContainerRegion.attachView(cartLinkView);
+                this.ContainerRegion.show(cartLinkView);
+            },
+
+            getCartSummary: function (params) {
+                var repo = new App.Cart.Repository();
+                var promise = repo.getCartSummary(params.cartInfo);
+                promise.done(function (cartSummaryItems) {
+                    if (typeof params.success === 'function') {
+                        params.success(cartSummaryItems);
+                    }
+                });
+                promise.fail(function () {
+                    if (typeof params.fail === 'function') {
+                        params.fail();
+                    }
+                });
+                promise.always(function () {
+                    if (typeof params.done === 'function') {
+                        params.done();
+                    }
+                });
+            },
+
+            getCartTotal: function (params) {
+                var repo = new App.Cart.Repository();
+                var promise = repo.getCartTotal(params.cartInfo);
+                promise.done(function (cartTotal) {
+                    if (typeof params.success === 'function') {
+                        params.success(cartTotal);
+                    }
+                });
+                promise.fail(function () {
+                    if (typeof params.fail === 'function') {
+                        params.fail();
+                    }
+                });
+                promise.always(function () {
+                    if (typeof params.done === 'function') {
+                        params.done();
+                    }
+                });
+            },
+
+            updateCartCount: function () {
+                var ci = App.Cart.controller.getCartInfo(),
+                    cartLinkView = this.View;
+                this.getCartTotal({
+                    cartInfo: ci,
+                    success: function (data) {
+                        if (cartLinkView) {
+                            cartLinkView.renderCartCount(data);
+                        }
+                    },
+                    fail: function () {
+                        if (cartLinkView) {
+                            cartLinkView.renderCartCountEmpty(data);
+                        }
+                    }
+                });
+            }
+        });
+
+        CartLink.addInitializer(function () {
+            CartLink.controller = new CartLink.Controller({
+                ContainerRegion: App.regionManager.get('Header')
+            });
+            App.vent.on("selectkuponandbuy:gotocart", function () {
+                window.scroll(0, 0);
+                if (CartLink.controller.View) {
+                    CartLink.controller.View.showCartSummaryModal();
+                }
+            });
+            App.commands.setHandler('updatecartcountaftersuccessfuladdtocart', function () {
+                CartLink.controller.updateCartCount();
+            });
+        });
+
+    });
+} (window.Diskupon));
+
+
+;(function (diskupon) {
+    diskupon.App.module("Cart.CartList", function (CartList, App, Backbone, Marionette, $, _) {
+
+        this.startWithParent = false;
+
+        var CartListView = Marionette.ItemView.extend({
+            template: tpl_cart_list,
+            className: 'dsk-vcCartList',
+            events: {
+
+            },
+            initialize: function () {
+                //_.bindAll(this, 'showCartSummaryModal');
+            }
+        });
+
+        CartList.Controller = Marionette.Controller.extend({
+            initialize: function (options) {
+                _.bindAll(this, 'show', 'renderCartList');
+                this.Region = options.Region;
+            },
+            renderCartList: function (cartModel) {
+                var view = new CartListView({
+                    model: cartModel
+                });
+                this.Region.show(view);
+            },
+            show: function () {
+                var dis = this;
+                var repo = new App.Cart.Repository();
+                var promise = repo.getCart(234);
+                promise.done(function (cartModel) {
+                    dis.renderCartList(cartModel);
+                });
+                promise.fail(function () {
+
+                });
+            }
+        });
+
+        CartList.addInitializer(function (args) {
+            CartList.controller = new CartList.Controller({
+                Region: args.Region
+            });
+        });
+
+    });
+} (window.Diskupon));
+
+
+;(function (diskupon) {
+    diskupon.App.module("Cart", function (Cart, App, Backbone, Marionette, $, _) {
+
+        function generateCartInfo () {
+            // dummy param sent to server, meaning this is a new cart, will generate new token, timestamp, etc
+            var cartInfo = {
+                CartId: parseInt((-1 * chance.natural({ max: 2147483647 })), 10),
+                Token: chance.guid(), // cart identifier
+                Timestamp: moment().utc().valueOf(), // timestamp used to validate cart
+                UserId: parseInt((-1 * chance.natural({ max: 2147483647 })), 10) // userid of current logged in member. If no member / guest, return < 0
+            };
+            return cartInfo;
+        }
+
+        Cart.Controller = Marionette.Controller.extend({
+            initialize: function (options) {
+                //_.bindAll(this);
+            },
+
+            startCartLinkModule: function () {
+                App.module('Cart.CartLink').start();
+            },
+
+            stopCartLinkModule: function () {
+                App.module('Cart.CartLink').stop();
+            },
+
+            getCartInfo: function () {
+                var inStorage = App.Storage.getItem('ds_cartInfo'),
+                    jCartInfo,
+                    emptyStorage = false;
+
+                if (!inStorage) { // localstorage is null
+                    emptyStorage = true;
+                } else {
+                    var is = JSON.parse(inStorage);
+                    if ($.isEmptyObject(is)) {
+                        emptyStorage = true;
+                    }
+                }
+
+                if (emptyStorage) {
+                    jCartInfo = generateCartInfo();
+                    var sCartInfo = JSON.stringify(jCartInfo);
+                    App.Storage.setItem('ds_cartInfo', sCartInfo);
+                }
+
+                inStorage = App.Storage.getItem('ds_cartInfo');
+                jCartInfo = JSON.parse(inStorage);
+                return jCartInfo;
+            },
+
+            storeCartInfo: function (jCartInfo) {
+                var sCartInfo = JSON.stringify(jCartInfo);
+                App.Storage.setItem('ds_cartInfo', sCartInfo);
+            },
+
+            showCartLink: function () {
+                Cart.CartLink.controller.show();
+            },
+
+            addKuponToCart: function (params) {
+                var dis = this,
+                    cartInfo = this.getCartInfo(),
+                    repo = new App.Cart.Repository();
+                var params2 = {
+                    CartInfo: cartInfo,
+                    DealId: params.Deal.DealId,
+                    SelectedKupons: params.SelectedKupons
+                };
+                repo.addKuponToCart(params2, function (data) {
+                    // data suppose to be CartInfo
+                    var ci = {
+                        CartId: data.CartId,
+                        Token: data.Token,
+                        Timestamp: data.Timestamp,
+                        UserId: data.UserId
+                    };
+                    dis.storeCartInfo(ci);
+                    App.commands.execute('updatecartcountaftersuccessfuladdtocart');
+                    App.vent.trigger("selectkuponandbuy:success");
+
+                }, function () {
+                    // add kupon to cart fail, show message?
+                    App.vent.trigger("selectkuponandbuy:failed");
+                });
+            },
+
+            checkout: function () {
+                App.module('Checkout').stop();
+                App.module('Checkout').start();
+
+                App.Checkout.controller.show();
+            }
+        });
+
+        Cart.addInitializer(function () {
+            Cart.controller = new Cart.Controller({
+            });
+            App.commands.setHandler('addkupontocart', function (params) {
+                Cart.controller.addKuponToCart(params);
+            });
+        });
+
+        Cart.addFinalizer(function () {
+            Cart.controller.close();
+            delete Cart.controller;
+        });
+
+    });
+} (window.Diskupon));
+;(function (diskupon) {
+    diskupon.App.module("Checkout", function (Checkout, App, Backbone, Marionette, $, _) {
+
+        var PaymentMethodsModel = Backbone.Model.extend({
+            url: '/api/v1/paymentmethods',
+            initialize: function () {
+                // if (typeof Backbone.Memento !== 'undefined') {
+                //     this.memento = new Backbone.Memento(this);
+
+                // }
+            },
+            getData: function () {
+                // this.fetch({ reset: true, data: $.param({}) });
+                this.fetch({ reset: true });
+            }
+        });
+
+        /*** Repositories ***/
+        Checkout.Repository = Marionette.Controller.extend({
+            initialize: function () {
+                //_.bindAll(this, 'search');
+            },
+
+            getPaymentMethods: function () {
+                var deferred = $.Deferred();
+
+                var model = new PaymentMethodsModel();
+                model.on('change', function (remodel) {
+                    deferred.resolve(remodel);
+                });
+                cModel.getData();
+
+                return deferred.promise();
+            }
+        });
+
+    });
+} (window.Diskupon));
+;(function (diskupon) {
+    diskupon.App.module("Checkout", function (Checkout, App, Backbone, Marionette, $, _) {
+
+        this.startWithParent = false;
+
+        var CheckoutLayout = Marionette.Layout.extend({
+            template: tpl_checkout,
+            regions: {
+                CartList: '#dsk_vcCartList',
+                PaymentMethods: '#dsk_vcPaymentMethods',
+                CustomerDetails: '#dsk_vcCustomerDetails'
+            },
+            onShow: function () {
+                this.$el.find('#dsk_vcAgreeTC').iCheck({
+                    checkboxClass: 'icheckbox_flat-green',
+                    radioClass: 'iradio_flat-green',
+                    increaseArea: '20%'
+                });
+            }
+        });
+
+        Checkout.Controller = Marionette.Controller.extend({
+            initialize: function (options) {
+                _.bindAll(this, 'show', 'startAndShowCartList', 'startAndShowPaymentMethods');
+                this.Layout = new CheckoutLayout();
+            },
+            startAndShowCartList: function () {
+                App.module('Cart.CartList').stop();
+                App.module('Cart.CartList').start({
+                    Region: this.Layout.CartList
+                });
+
+                App.Cart.CartList.controller.show();
+            },
+            startAndShowPaymentMethods: function () {
+                App.module('Checkout.PaymentMethods').stop();
+                App.module('Checkout.PaymentMethods').start({
+                    Region: this.Layout.PaymentMethods
+                });
+
+                App.Checkout.PaymentMethods.controller.show();
+            },
+            show: function () {
+                // render layout
+                this.Layout.render();
+                App.regionManager.get('Main').show(this.Layout);
+
+                this.startAndShowCartList();
+                this.startAndShowPaymentMethods();
+            }
+        });
+
+        Checkout.addInitializer(function () {
+            Checkout.controller = new Checkout.Controller({
+
+            });
+        });
+
+    });
+} (window.Diskupon));
+
+
+;(function (diskupon) {
+    diskupon.App.module("Checkout.PaymentMethods", function (PaymentMethods, App, Backbone, Marionette, $, _) {
+
+        this.startWithParent = false;
+
+        var PaymentMethodsView = Marionette.ItemView.extend({
+            template: tpl_payment_methods,
+            className: 'dsk-vcPaymentMethods',
+            events: {
+
+            },
+            initialize: function () {
+            },
+            onShow: function () {
+                this.$el.find('.rb-paymentMethod').iCheck({
+                    checkboxClass: 'icheckbox_flat-green',
+                    radioClass: 'iradio_flat-green',
+                    increaseArea: '20%'
+                });
+            }
+        });
+
+        PaymentMethods.Controller = Marionette.Controller.extend({
+            initialize: function (options) {
+                _.bindAll(this, 'show', 'renderPaymentMethods');
+                this.Region = options.Region;
+            },
+            renderPaymentMethods: function (model) {
+                var view = new PaymentMethodsView({
+                    model: model
+                });
+                this.Region.show(view);
+            },
+            show: function () {
+                var dis = this;
+                // var repo = new App.Checkout.Repository();
+                // var promise = repo.getPaymentMethods();
+                // promise.done(function (model) {
+                //     dis.renderPaymentMethods(model);
+                // });
+                // promise.fail(function () {
+
+                // });
+                dis.renderPaymentMethods();
+            }
+        });
+
+        PaymentMethods.addInitializer(function (args) {
+            PaymentMethods.controller = new PaymentMethods.Controller({
+                Region: args.Region
+            });
+        });
+
+    });
+} (window.Diskupon));
+
+
+;(function (diskupon) {
+    diskupon.App.module("Affiliates", function (Affiliates, App, Backbone, Marionette, $, _) {
+
+        this.startWithParent = false;
+
+        Affiliates.AffiliatesView = Marionette.ItemView.extend({
+            template: tpl_affiliates,
+            tagName: 'div',
+            className: '',
+            events: {
+
+            },
+            onRender: function () {
+                this.$el.find('#affiliates_stream').flexslider({
+                    animation: "slide",
+                    controlNav: false,
+                    animationLoop: true,
+                    slideshow: true,
+                    itemWidth: 150,
+                    pauseOnAction: false,
+                    pauseOnHover: false,
+                    pausePlay: false,
+                    slideshowSpeed: 6000
+                });
+            }
+        });
+
+        Affiliates.Controller = Marionette.Controller.extend({
+            initialize: function (options) {
+                _.bindAll(this, 'show');
+                this.AffiliatesRegion = options.AffiliatesRegion;
+            },
+
+            show: function () {
+                var view = new Affiliates.AffiliatesView({
+                });
+                this.AffiliatesRegion.show(view);
+            }
+        });
+
+        Affiliates.addInitializer(function () {
+            Affiliates.controller = new Affiliates.Controller({
+                AffiliatesRegion: App.regionManager.get('Affiliates')
+            });
+        });
+
+    });
+} (window.Diskupon));
+;(function (diskupon) {
+    diskupon.App.module("HomeSlides", function (HomeSlides, App, Backbone, Marionette, $, _) {
+
+        this.startWithParent = false;
+
+        HomeSlides.on('start', function () {
+
+        });
+
+        HomeSlides.HomeSlidesView = Marionette.ItemView.extend({
+            template: tpl_home_slides,
+            tagName: 'div',
+            className: '',
+            events: {
+
+            },
+            onRender: function () {
+
+            }
+        });
+
+        HomeSlides.Controller = Marionette.Controller.extend({
+            initialize: function (options) {
+                _.bindAll(this, 'show');
+                this.HomeSlidesRegion = options.HomeSlidesRegion;
+            },
+
+            show: function () {
+                var view = new HomeSlides.HomeSlidesView({
+                });
+                this.HomeSlidesRegion.show(view);
+            }
+        });
+
+        HomeSlides.addInitializer(function (args) {
+            HomeSlides.controller = new HomeSlides.Controller({
+                HomeSlidesRegion: args.HomeSlidesRegion
+            });
+        });
+
+    });
+} (window.Diskupon));
+;(function (diskupon) {
+    diskupon.App.module("RegionSelector", function (RegionSelector, App, Backbone, Marionette, $, _) {
+
+        this.startWithParent = false;
+
+        RegionSelector.SelectRegionView = Marionette.ItemView.extend({
+            template: tpl_region_selector,
+            tagName: 'span',
+            className: 'dsk-regionPicker',
+            events: {
+                'change #dsk_select_region': 'regionChanged'
+            },
+            onRender: function () {
+                this.$el.find('#dsk_select_region').val(App.SelectedRegionId.get());
+            },
+            regionChanged: function (e) {
+                e.preventDefault();
+                var selectedRegionId = parseInt($(e.currentTarget).val(), 10);
+                // trigger view event
+                this.trigger('region:changed', selectedRegionId);
+            }
+        });
+
+        RegionSelector.Controller = Marionette.Controller.extend({
+            initialize: function (options) {
+                _.bindAll(this, 'show', 'regionChanged');
+                this.RegionSelectorRegion = options.RegionSelectorRegion;
+            },
+
+            show: function () {
+                var that = this,
+                    repo = new App.Deals.Repository();
+
+                var promise = repo.getRegions();
+                promise.done(function (regions) {
+                    var view = new RegionSelector.SelectRegionView({
+                        collection: regions
+                    });
+
+                    // add listener for view event
+                    that.listenTo(view, 'region:changed', that.regionChanged);
+
+                    that.RegionSelectorRegion.show(view);
+                });
+            },
+
+            /*** event handler ***/
+            regionChanged: function (selectedRegionId) {
+                //this.trigger('region:changed', selectedRegionId);
+                App.SelectedRegionId.set(selectedRegionId);
+                window.location.href = '/';
+            }
+        });
+
+        RegionSelector.addInitializer(function () {
+            RegionSelector.controller = new RegionSelector.Controller({
+                RegionSelectorRegion: App.regionManager.get('RegionSelector')
+            });
+        });
+
+    });
+} (window.Diskupon));
+;(function (diskupon) {
+    diskupon.App.module("TopMenu", function (TopMenu, App, Backbone, Marionette, $, _) {
+
+        this.startWithParent = false;
+
+        TopMenu.TopMenuItemView = Marionette.ItemView.extend({
+            tagName: 'li',
+            template: tpl_top_menu,
+            onBeforeRender: function() {
+                var subCategories = this.model.get('SubCategories');
+                if (subCategories && subCategories.length > 0) {
+                    this.$el.addClass('dropdown');
+                    this.model.set('HasSubCategories', true);
+                } else {
+                    this.model.set('HasSubCategories', false);
+                }
+
+                var catId = parseInt(this.model.get('CategoryId'), 10);
+                this.$el.attr('data-key', catId);
+            }
+        });
+
+        TopMenu.TopMenuCollectionView = Marionette.CollectionView.extend({
+            tagName: 'ul',
+            className: 'nav nav-pills dsk-topMenuInner',
+            itemView: TopMenu.TopMenuItemView,
+            initialize: function (options) {
+                _.bindAll(this, 'setActiveMenuItem');
+                this.activeTopMenuKey = options.activeTopMenuKey;
+                this.activeTopMenuSubKey = options.activeTopMenuSubKey;
+            },
+            onRender: function () {
+
+            },
+            onShow: function () {
+                this.trigger('topmenuview:shown');
+            },
+            setActiveMenuItem: function (activeTopMenuKey, activeTopMenuSubKey) {
+                this.$el.find('.active').removeClass('active');
+                if (activeTopMenuKey) {
+                    this.$el.find('[data-key="' + activeTopMenuKey + '"]').addClass('active');
+                }
+            }
+        });
+
+        /******* top menu for mobile *******/
+        TopMenu.TopMenuMobileItemView = Marionette.ItemView.extend({
+            tagName: 'li',
+            template: tpl_top_menu_mobile,
+            onBeforeRender: function() {
+                var subCategories = this.model.get('SubCategories');
+                if (subCategories && subCategories.length > 0) {
+                    this.$el.addClass('dropdown');
+                    this.model.set('HasSubCategories', true);
+                } else {
+                    this.model.set('HasSubCategories', false);
+                }
+
+                var catId = parseInt(this.model.get('CategoryId'), 10);
+                this.$el.attr('data-key', catId);
+            }
+        });
+
+        TopMenu.TopMenuMobileCollectionView = Marionette.CollectionView.extend({
+            tagName: 'ul',
+            className: 'nav nav-pills dsk-topMenuInnerMobile',
+            itemView: TopMenu.TopMenuMobileItemView,
+            initialize: function (options) {
+                _.bindAll(this, 'setActiveMenuItem');
+                this.activeTopMenuKey = options.activeTopMenuKey;
+                this.activeTopMenuSubKey = options.activeTopMenuSubKey;
+            },
+            onRender: function () {
+
+            },
+            onShow: function () {
+                this.trigger('topmenumobileview:shown');
+            },
+            setActiveMenuItem: function (activeTopMenuKey, activeTopMenuSubKey) {
+                this.$el.find('.active').removeClass('active');
+                var key = 0;
+                if (activeTopMenuSubKey) {
+                    key = activeTopMenuSubKey;
+                } else if (activeTopMenuKey) {
+                    key = activeTopMenuKey;
+                }
+                if (key) {
+                    this.$el.find('[data-key="' + key + '"]').addClass('active');
+                }
+            }
+        });
+
+        TopMenu.Controller = Marionette.Controller.extend({
+            initialize: function (options) {
+                _.bindAll(this, 'show', 'setActiveMenuItem');
+                this.TopMenuRegion = options.TopMenuRegion;
+                this.TopMenuRegionMobile = options.TopMenuRegionMobile;
+                this.TopMenuView = undefined;
+                this.TopMenuMobileView = undefined;
+                this.CategoryId = options.CategoryId;
+                this.SubCategoryId = options.SubCategoryId;
+            },
+
+            show: function () {
+                var that = this;
+                var repo = new App.Deals.Repository();
+                // fetch data
+                var promise = repo.getDealCategories();
+                promise.done(function (categories) {
+                    /*** in order ***/
+                    var view = new TopMenu.TopMenuCollectionView({
+                        collection: categories
+                    });
+                    that.listenTo(view, 'topmenuview:shown', function () {
+                        that.setActiveMenuItem(that.CategoryId, that.SubCategoryId);
+                    });
+                    that.TopMenuView = view;
+                    that.TopMenuRegion.show(view);
+
+                    var mobileView = new TopMenu.TopMenuMobileCollectionView({
+                        collection: categories
+                    });
+                    that.listenTo(mobileView, 'topmenumobileview:shown', function () {
+                        that.setActiveMenuItem(that.CategoryId, that.SubCategoryId);
+                    });
+                    that.TopMenuMobileView = mobileView;
+                    that.TopMenuRegionMobile.show(mobileView);
+                    /*** end in order ***/
+                });
+                promise.fail(function () {
+                });
+                promise.always(function () {
+                });
+            },
+
+            setActiveMenuItem: function (activeTopMenuKey, activeTopMenuSubKey) {
+                if (typeof this.TopMenuView !== 'undefined') {
+                    this.TopMenuView.setActiveMenuItem(activeTopMenuKey, activeTopMenuSubKey);
+                }
+                if (typeof this.TopMenuMobileView !== 'undefined') {
+                    this.TopMenuMobileView.setActiveMenuItem(activeTopMenuKey, activeTopMenuSubKey);
+                }
+            }
+        });
+
+        TopMenu.addInitializer(function (args) {
+            var defs = {
+                CategoryId: '',
+                SubCategoryId: 0
+            };
+            var args2 = $.extend({}, defs, args);
+            TopMenu.controller = new TopMenu.Controller({
+                TopMenuRegion: App.regionManager.get('TopMenuInner'),
+                TopMenuRegionMobile: App.regionManager.get('TopMenuInnerMobile'),
+                CategoryId: args2.CategoryId,
+                SubCategoryId: args2.SubCategoryId
+            });
+        });
+    });
+} (window.Diskupon));
+;(function (diskupon) {
+    diskupon.App.module("Deals", function (Deals, App, Backbone, Marionette, $, _) {
+
+        Deals.DealModel = Backbone.Model.extend({
+            initialize: function () {
+            },
+            url: diskupon.requestUrl('deals'),
+            getDeal: function (params) {
+                this.fetch({ data: $.param(params) });
+            }
+        });
+
+        Deals.DealCollection = Backbone.Collection.extend({
+            model: Deals.DealModel,
+            url: diskupon.requestUrl('deals'),
+            search: function (searchParam) {
+                this.fetch({ reset: true, data: $.param(searchParam) });
+            }
+        });
+
+        Deals.DealCategoryModel = Backbone.Model.extend({
+            initialize: function () {
+            }
+        });
+
+        Deals.DealCategoryCollection = Backbone.Collection.extend({
+            model: Deals.DealCategoryModel,
+            url: diskupon.requestUrl('dealcategories')
+        });
+
+        Deals.RegionModel = Backbone.Model.extend({
+            initialize: function () {
+            }
+        });
+
+        Deals.RegionCollection = Backbone.Collection.extend({
+            model: Deals.RegionModel,
+            url: diskupon.requestUrl('regions')
+        });
+
+        Deals.Repository = Marionette.Controller.extend({
+            initialize: function () {
+                _.bindAll(this, 'search');
+
+                this.defaultSearchParams = {
+                    RegionId: 1, // jakarta
+                    CategoryId: 1, // all kupons
+                    PageSize: 65000, // num of records per page
+                    PageNumber: 1, // 1-based
+                    SearchQuery: ''
+                };
+            },
+
+            search: function (options) {
+                var searchParam = $.extend({}, this.defaultSearchParams, options),
+                    deferred = $.Deferred(),
+                    dealCollection = new Deals.DealCollection();
+
+                dealCollection.on('reset', function (deals) {
+                    deferred.resolve(deals);
+                });
+
+                dealCollection.search(searchParam);
+
+                return deferred.promise();
+            },
+
+            getOne: function (id) {
+                var dealModel = new Deals.DealModel(),
+                    deferred = $.Deferred();
+
+                dealModel.on('change', function (deal) {
+                    deferred.resolve(deal);
+                });
+
+                dealModel.getDeal({ DealId: id });
+
+                return deferred.promise();
+            },
+
+            getDealCategories: function () {
+                var deferred = $.Deferred(),
+                    categoryCollection = new Deals.DealCategoryCollection();
+
+                categoryCollection.on('reset', function (categories) {
+                    deferred.resolve(categories);
+                });
+
+                categoryCollection.fetch({ reset: true });
+
+                return deferred.promise();
+            },
+
+            getRegions: function () {
+                var deferred = $.Deferred(),
+                    regionCollection = new Deals.RegionCollection();
+
+                regionCollection.on('reset', function (regions) {
+                    deferred.resolve(regions);
+                });
+
+                regionCollection.fetch({ reset: true });
+
+                return deferred.promise();
+            }
+        });
+
+    });
+} (window.Diskupon));
+;(function (diskupon) {
+
+    diskupon.App.module("Deals.Details", function (DealsDetails, App, Backbone, Marionette, $, _) {
+
+        this.startWithParent = false;
+
+        DealsDetails.on('start', function () {
+
+        });
+
+        /*** TODO: since this is too big, separate into regions and sub views for modularity ***/
+        DealsDetails.DealsDetailsView = Marionette.ItemView.extend({
+            template: tpl_deal_details,
+            tagName: 'div',
+            className: 'dsk-dealDetails',
+            events: {
+                'click #buyThis': 'buyThisClicked'
+            },
+            buyThisClicked: function (e) {
+                e.preventDefault();
+                this.trigger('dealdetails:buy');
+            },
+            onRender: function () {
+            },
+            setupSlideShow: function () {
+                // slider for deal images
+                this.$el.find('#deal_images_navs').flexslider({
+                    animation: "slide",
+                    controlNav: false,
+                    animationLoop: false,
+                    slideshow: false,
+                    itemWidth: 100,
+                    asNavFor: '#deal_images'
+                });
+
+                this.$el.find('#deal_images').flexslider({
+                    animation: "slide",
+                    controlNav: false,
+                    animationLoop: false,
+                    slideshow: false,
+                    sync: "#deal_images_navs"
+                });
+                // end slider
+
+                // image to occupy 100% container
+                this.$el.find('.sliderMain-imgContainer').imgLiquid();
+            },
+            setupMap: function () {
+                var that = this;
+                // google maps for location
+                if (typeof Maplace !== 'undefined') {
+                    var mapOptions = {
+                        disableDefaultUI: true,
+                        // zoom: 10,
+                        // center: latlng
+                    };
+                    var jlocations = this.model.toJSON().Locations;
+                    var locs = _.map(jlocations, function (item) {
+                        var ct = '<strong>' + item.LocationName + '</strong>' +
+                                 '<p>' + item.LocationAddress + '</p>' +
+                                 '<i>&nbsp;</i>';
+                        return {
+                            zoom: 12,
+                            lat: item.Latitude,
+                            lon: item.Longitude,
+                            title: ct,
+                            html: ct,
+                            // icon: 'http://maps.google.com/mapfiles/markerA.png'
+                        };
+                    });
+                    new Maplace({
+                        locations: locs,
+                        map_div: '#map_canvas',
+                        controls_div: '#map_controls',
+                        controls_type: 'list',
+                        controls_on_map: false,
+                        controls_position: google.maps.ControlPosition.BOTTOM_LEFT,
+                        view_all: false,
+                        start: 5,
+                        map_options: mapOptions,
+                        afterShow: function (index, location, marker) {
+                            that.trigger('dealdetails:mapshown');
+                        }
+                    }).Load();
+                }
+            },
+            loadMap: function () {
+                var dis = this;
+                yepnope({
+                    test: window.google,
+                    yep: ['/libs/maplace.min.js'],
+                    complete: function () {
+                        dis.setupMap();
+                    }
+                });
+                if (typeof window.google === 'undefined') {
+                    this.trigger('dealdetails:mapshown');
+                }
+            },
+            setupMasonry: function () {
+                // masonry for deal details sections
+                var container = this.$el.find('.dsk-dd-detailsContainer').get(0);
+                var msnry = new Masonry(container, {
+                    itemSelector: '.dsk-dd-details'
+                });
+                // don't comment this, used in window.load
+                window.msnry = msnry;
+                diskupon.GlobalEvents.tickRelayoutMasonry();
+            },
+            setupPopover: function () {
+                var dis = this;
+                var elem = tpl_kupon_selector(this.model.toJSON());
+                this.$el.find("#buyThis").popover({
+                    title: 'Choose your Kupon:<button type="button" id="close" class="close" onclick="$(&quot;#buyThis&quot;).popover(&quot;hide&quot;);">&times;</button>',
+                    content: elem,
+                    html: true,
+                    placement: 'bottom',
+                    trigger: 'manual'
+                });
+                this.$el.find("#buyThis").on('shown.bs.popover', function () {
+                    dis.$el.find('.chooser').iCheck({
+                        checkboxClass: 'icheckbox_flat-green',
+                        radioClass: 'iradio_flat-green',
+                        increaseArea: '20%'
+                    });
+                    dis.$el.find('#dsk_kselectorBuy').prop('disabled', false);
+                });
+            },
+            setupPopoverEvents: function () {
+                var dis = this;
+                this.$el.find('.dsk-dd-buy').on('click', '#dsk_kselectorBuy', function (e) {
+                    e.preventDefault();
+                    var checkedElem = dis.$el.find('input[name="selected_kupon"]:checked');
+                    if (checkedElem.length <= 0) {
+                        return false;
+                    } else {
+                        var selectedKupons = [];
+                        $.each(checkedElem, function(idx, item) {
+                            var kid = $(item).val();
+                            var qty = $(item).closest('.list-group-item').find('input[type="text"].kpQty').val();
+                            selectedKupons.push({
+                                KuponId: kid,
+                                Qty: qty
+                            });
+                        });
+                        dis.trigger('dealdetails:selectkuponandbuy', { SelectedKupons: selectedKupons, Deal: dis.model.toJSON() });
+                    }
+                });
+                this.$el.find('.dsk-dd-buy').on('click', '#dsk_kselectorCancel', function (e) {
+                    e.preventDefault();
+                    dis.$el.find("#buyThis").popover('hide');
+                });
+                this.$el.find('.dsk-dd-buy').on('click', '#ks_gotocart', function (e) {
+                    e.preventDefault();
+                    App.vent.trigger('selectkuponandbuy:gotocart');
+                    dis.hideKuponSelector();
+                });
+                this.$el.find('.dsk-dd-buy').on('click', '.ks-close', function (e) {
+                    e.preventDefault();
+                    dis.hideKuponSelector();
+                });
+                this.$el.find('.dsk-dd-buy').on('blur', '.kpQty', function () {
+                    var p = parseInt($(this).val(), 10);
+                    if(isNaN(p)) {
+                        $(this).val(0);
+                    }
+                });
+            },
+            blockKuponSelector: function () {
+                this.$el.find('.popover-content').block({
+                    message: '<h1>adding to cart</h1>',
+                    fadeIn: 700
+                });
+            },
+            unblockKuponSelector: function () {
+                this.$el.find('.popover-content').unblock({
+                    fadeOut: 700
+                });
+            },
+            showKuponSelector: function () {
+                this.$el.find("#buyThis").popover('toggle');
+            },
+            hideKuponSelector: function () {
+                this.$el.find("#buyThis").popover('hide');
+            },
+            onShow: function () {
+                this.setupSlideShow();
+                this.loadMap();
+                this.setupPopover();
+                this.setupPopoverEvents();
+            }
+        });
+
+        var DealDetailsPageLayout = Backbone.Marionette.Layout.extend({
+            template: tpl_deal_details_page, //"#dealDetailsPageLayout_template",
+            regions: {
+                MainContent: '#dsk_content',
+            },
+            className: 'container'
+        });
+
+        DealsDetails.Controller = Marionette.Controller.extend({
+            initialize: function (options) {
+                _.bindAll(this, 'showDealsDetails', 'renderDealsDetails', 'renderDetailsLayout');
+                this.Layout = new DealDetailsPageLayout();
+                this.DealId = 0;
+            },
+
+            renderDetailsLayout: function () {
+                this.Layout.render();
+                App.regionManager.get('Main').show(this.Layout);
+            },
+
+            renderDealsDetails: function (deal) {
+                var dis = this;
+                var view = new DealsDetails.DealsDetailsView({
+                    model: deal
+                });
+                this.listenTo(view, 'dealdetails:buy', function () {
+                    dis.buyThisDealHandler(view);
+                });
+                this.listenTo(view, 'dealdetails:selectkuponandbuy', function (params) {
+                    App.vent.on("selectkuponandbuy:success", function () {
+                        setTimeout(function () {
+                            var sm = 'item was added to cart<br/><br/>' +
+                                     '<button type="button" id="ks_gotocart" class="wisteria-flat-button btn-xs">go to cart&nbsp;<i class="fa fa-arrow-up"></i></button>' +
+                                     '&nbsp;&nbsp;&nbsp;' +
+                                     '<button type="button" class="ks-close carrot-flat-button btn-xs">keep shopping&nbsp;<i class="fa fa-times"></i></button>';
+                            view.$el.find('.blockUI.blockMsg h1').html(sm);
+                            // var em = 'item(s) was not added to cart<br/>refresh page<br/>and try again<br/><br/>' +
+                            //          '<button type="button" class="ks-close carrot-flat-button btn-xs">keep shopping&nbsp;<i class="fa fa-times"></i></button>';
+                            view.$el.find('.blockUI.blockMsg h1').html(em);
+                        }, 1000);
+                    });
+                    App.vent.on("selectkuponandbuy:failed", function () {
+                        setTimeout(function () {
+                            var em = 'item(s) was not added to cart<br/>refresh page<br/>and try again<br/><br/>' +
+                                     '<button type="button" class="ks-close carrot-flat-button btn-xs">keep shopping&nbsp;<i class="fa fa-times"></i></button>';
+                            view.$el.find('.blockUI.blockMsg h1').html(em);
+                        }, 1000);
+                    });
+                    view.blockKuponSelector();
+                    App.commands.execute('addkupontocart', params);
+                });
+                this.listenTo(view, 'dealdetails:mapshown', function () {
+                    view.setupMasonry();
+                });
+                this.Layout.MainContent.show(view);
+
+                // set active menu
+                var dealModel = deal.toJSON();
+                App.TopMenu.controller.setActiveMenuItem(diskupon.DealCategory.ByCategory, dealModel.DealCategoryId);
+            },
+
+            showDealsDetails: function () {
+                var that = this;
+                var repo = new App.Deals.Repository();
+                var promise = repo.getOne(this.DealId);
+                promise.done(function (deal) {
+                    that.renderDetailsLayout();
+                    that.renderDealsDetails(deal);
+                });
+            },
+
+            buyThisDealHandler: function (view) {
+                var jmodel = view.model.toJSON();
+                view.showKuponSelector();
+            }
+        });
+
+        DealsDetails.addInitializer(function (args) {
+            DealsDetails.controller = new DealsDetails.Controller({
+            });
+        });
+
+        DealsDetails.addFinalizer(function () {
+            DealsDetails.controller.close();
+            delete DealsDetails.controller;
+        });
+
+    });
+} (window.Diskupon));
+;(function (diskupon) {
+    diskupon.App.module("Deals.List", function (DealsList, App, Backbone, Marionette, $, _) {
+
+        this.startWithParent = false;
+
+        DealsList.on('start', function () {
+        });
+
+        DealsList.DealsListItemView = Marionette.ItemView.extend({
+            template: tpl_deals_item,
+            tagName: 'div',
+            className: 'dsk-dealContainer pull-left'
+        });
+
+        DealsList.DealsListCollectionView = Marionette.CollectionView.extend({
+            tagName: 'div',
+            className: 'dsk-listOfDeals clearfix',
+            itemView: DealsList.DealsListItemView,
+            onRender: function () {
+                this.$el.find('.dsk-di-cover').lazyload({
+                    //effect: 'fadeIn'
+                });
+                this.$el.find('.dsk-dealItem').hover(function () {
+                    $(this).addClass('hover');
+                }, function () {
+                    $(this).removeClass('hover');
+                });
+            }
+        });
+
+        /**** mobile version view ****/
+        DealsList.DealsListMobileItemView = Marionette.ItemView.extend({
+            template: tpl_deals_item_mobile,
+            tagName: 'div',
+            className: 'dsk-dealContainer-mobile clearfix'
+        });
+
+        DealsList.DealsListMobileCollectionView = Marionette.CollectionView.extend({
+            tagName: 'div',
+            className: 'dsk-listOfDeals-mobile clearfix',
+            itemView: DealsList.DealsListMobileItemView,
+            onRender: function () {
+                this.$el.find('.dsk-di-cover-mobile').lazyload({
+                    //effect: 'fadeIn'
+                });
+            }
+        });
+
+        var DealListPageLayout = Backbone.Marionette.Layout.extend({
+            template: tpl_deals_list_page, //"#dealListPageLayout_template",
+            regions: {
+                HomeSlides: '#dsk_homeSlides',
+                MainContent: '#dsk_content',
+                MainContentMobile: '#dsk_content_mobile'
+            },
+            className: 'container'
+        });
+
+        DealsList.Controller = Marionette.Controller.extend({
+            initialize: function (options) {
+                _.bindAll(this, 'showDeals', 'renderDeals');
+                this.SearchParams = {
+                    RegionId: 1, // jakarta
+                    CategoryId: diskupon.DealCategory.All, // all kupons
+                    PageNumber: 1, // 1-based
+                    SearchQuery: ''
+                };
+                this.Layout = new DealListPageLayout();
+            },
+
+            renderListLayout: function () {
+                this.Layout.render();
+                App.regionManager.get('Main').show(this.Layout);
+            },
+
+            renderHomeSlides: function () {
+                App.module("HomeSlides").start({ HomeSlidesRegion: this.Layout.HomeSlides });
+                App.HomeSlides.controller.show();
+                App.module("HomeSlides").stop();
+            },
+
+            renderDeals: function (deals) {
+                if ($(this.Layout.MainContent.el).is(':visible')) {
+                    var colView = new DealsList.DealsListCollectionView({
+                        collection: deals
+                    });
+                    this.Layout.MainContent.show(colView);
+                    this.trigger('dealslist:listshown');
+                }
+
+                if ($(this.Layout.MainContentMobile.el).is(':visible')) {
+                    var mobileColView = new DealsList.DealsListMobileCollectionView({
+                        collection: deals
+                    });
+                    this.Layout.MainContentMobile.show(mobileColView);
+                    this.trigger('dealslist:listmobileshown');
+                }
+            },
+
+            showDeals: function () {
+                var that = this;
+                var repo = new App.Deals.Repository();
+
+                // fetch data
+                this.SearchParams.RegionId = App.SelectedRegionId.get();
+
+                var promise = repo.search(this.SearchParams);
+                promise.done(function (deals) {
+                    // render the data
+                    that.renderListLayout();
+                    that.renderHomeSlides();
+                    that.renderDeals(deals);
+                });
+            }
+        });
+
+        DealsList.addInitializer(function (args) {
+            DealsList.controller = new DealsList.Controller({
+            });
+
+            DealsList.controller.on('dealslist:listshown', function () {
+                $(window).trigger('scroll');
+            });
+
+            DealsList.controller.on('dealslist:listmobileshown', function () {
+                $(window).trigger('scroll');
+            });
+        });
+
+        DealsList.addFinalizer(function () {
+            DealsList.controller.close();
+            delete DealsList.controller;
+        });
+
+    });
+} (window.Diskupon));
+;(function (diskupon) {
+    diskupon.App.module("Deals", function (Deals, App, Backbone, Marionette, $, _) {
+
+        Deals.on('start', function () {
+
+        });
+
+        Deals.Controller = Marionette.Controller.extend({
+            initialize: function (options) {
+                _.bindAll(this, 'showDealsList', 'showDealDetails');
+            },
+
+            stopSubmodule: function () {
+                App.module('Deals.List').stop();
+                App.module('Deals.Details').stop();
+                App.module('Deals.TopDeals').stop();
+            },
+
+            startListSubmodule: function () {
+                this.stopSubmodule();
+
+                App.module('Deals.List').start();
+            },
+
+            startDetailsModule: function () {
+                this.stopSubmodule();
+
+                App.module('Deals.Details').start();
+            },
+
+            startTopDealsModule: function () {
+                this.stopSubmodule();
+
+                App.module('Deals.TopDeals').start();
+            },
+
+            showDealsList: function (options) {
+                this.startListSubmodule();
+
+                var defaultOptions = {
+                    categoryId: diskupon.DealCategory.All,
+                    searchQuery: ''
+                };
+                options = $.extend({}, defaultOptions, options);
+
+                Deals.List.controller.SearchParams.CategoryId = options.categoryId;
+                Deals.List.controller.SearchParams.SearchQuery = options.searchQuery;
+                Deals.List.controller.showDeals();
+            },
+
+            showDealDetails: function (dealId) {
+                this.startDetailsModule();
+
+                Deals.Details.controller.DealId = dealId;
+                Deals.Details.controller.showDealsDetails();
+            },
+
+            showTopDealsGroupByCategory: function () {
+                this.startTopDealsModule();
+
+                Deals.TopDeals.controller.showTopDeals();
+            }
+        });
+
+        Deals.addInitializer(function () {
+            Deals.controller = new Deals.Controller({
+            });
+        });
+
+        Deals.addFinalizer(function () {
+            Deals.controller.close();
+            delete Deals.controller;
+        });
+
+    });
+} (window.Diskupon));
+;(function (diskupon) {
+    diskupon.App.module("Deals.TopDeals", function (TopDeals, App, Backbone, Marionette, $, _) {
+
+        this.startWithParent = false;
+
+        var TopDealsPageLayout = Backbone.Marionette.Layout.extend({
+            template: tpl_top_deals_page,
+            regions: {
+                HomeSlides: '#dsk_homeSlides',
+                MainContent: '#dsk_content',
+                MainContentMobile: '#dsk_content_mobile'
+            },
+            className: 'container'
+        });
+
+
+        TopDeals.Controller = Marionette.Controller.extend({
+            initialize: function (options) {
+                //_.bindAll(this, 'showDeals', 'renderDeals');
+
+                this.Layout = new TopDealsPageLayout();
+            },
+
+            renderTopDealsLayout: function () {
+                this.Layout.render();
+                App.regionManager.get('Main').show(this.Layout);
+            },
+
+            renderHomeSlides: function () {
+                App.module("HomeSlides").start({ HomeSlidesRegion: this.Layout.HomeSlides });
+                App.HomeSlides.controller.show();
+                App.module("HomeSlides").stop();
+            },
+
+            showTopDeals: function () {
+                this.renderTopDealsLayout();
+                this.renderHomeSlides();
+            }
+        });
+
+        TopDeals.addInitializer(function (args) {
+            TopDeals.controller = new TopDeals.Controller({
+            });
+
+        });
+
+        TopDeals.addFinalizer(function () {
+            TopDeals.controller.close();
+            delete TopDeals.controller;
+        });
+
+    });
+} (window.Diskupon));
+;(function (diskupon) {
+    diskupon.GlobalEvents = {
+        tickRelayoutMasonry: function () {
+            if (typeof window.msnry !== 'undefined') {
+                window.msnry.layout();
+                var times = 0;
+                var msnryTimeout = window.setInterval(function () {
+                    //console.log('masonry relayout');
+                    window.msnry.layout();
+                    times++;
+                    if (times > 30) {
+                        window.clearInterval(msnryTimeout);
+                    }
+                }, 300);
+            }
+        }
+    };
+} (window.Diskupon));
+;/**************************/
+/*
+/* move these methods below to another library
+/*
+/***************************/
+
+/*** backbone force use POST when fetching ***/
+// Backbone.ajax = function () {
+//     var args = Array.prototype.slice.call(arguments);
+//     if (args[0]) {
+//         args[0].type = 'POST';
+//     }
+//     return Backbone.$.ajax.apply(Backbone.$, args);
+// };
+
+// /*** override native console ***/
+// (function(){
+//     var nativeConsoleLog = console.log;
+//     console.log = function (message) {
+//         // DO MESSAGE HERE.
+//         //nativeConsoleLog.apply(console, arguments);
+//         return false;
+//     };
+// })();
+
+(function ($) {
+    if (NProgress) {
+        //NProgress.configure({ ease: 'ease', speed: 500 });
+        //NProgress.configure({ trickle: false });
+        //NProgress.configure({ trickleRate: 0.02, trickleSpeed: 100 });
+    }
+
+    $(document).ajaxStart(function () {
+        if (NProgress) {
+            NProgress.start();
+        }
+    });
+    $(document).ajaxStop(function () {
+        if (NProgress) {
+            NProgress.done(true);
+        }
+    });
+}(jQuery));
+
+window.onerror = function (message, url, lineNumber) {
+    console.log(message);
+    if (NProgress) {
+        NProgress.done(true);
+    }
+};
+;function encode (value) {
+    var unencoded = value;
+    var encoded = encodeURIComponent(unencoded).replace(/'/g,"%27").replace(/"/g,"%22");
+    return encoded;
+}
+
+function decode(value) {
+    var encoded = value;
+    var decoded = decodeURIComponent(encoded.replace(/\+/g, " "));
+    return decoded;
+}
+
+/*** make push state for backbone, intercept anchor click ***/
+function prepareBackbonePushState () {
+    // Use absolute URLs  to navigate to anything not in your Router.
+    // Only need this for pushState enabled browsers
+    if (Backbone.history && Backbone.history._hasPushState) {
+        // Use delegation to avoid initial DOM selection and allow all matching elements to bubble
+        $(document).delegate("a[href^='/']", "click", function (evt) {
+            //console.log('hijacked!!!');
+            // Get the anchor href and protcol
+            var href = $(this).attr("href");
+            var protocol = this.protocol + "//";
+            // Ensure the protocol is not part of URL, meaning its relative.
+            // Stop the event bubbling to ensure the link will not cause a page refresh.
+            if (href.slice(protocol.length) !== protocol) {
+                evt.preventDefault();
+                // Note by using Backbone.history.navigate, router events will not be
+                // triggered.  If this is a problem, change this to navigate on your
+                // router.
+                Backbone.history.navigate(href, true);
+            }
+        });
+    }
+}
+
+// function randomString (length) {
+//     var chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+//     var result = '';
+//     for (var i = length; i > 0; --i) result += chars[Math.round(Math.random() * (chars.length - 1))];
+//     return result;
+// }
+
+;
+//# sourceMappingURL=app.js.map
